@@ -1,0 +1,26 @@
+class Solution {
+
+    /**
+     * @param Integer $num
+     * @return Integer[]
+     */
+    function countBits($num) {
+        
+        $sol = array();
+        
+        for ($i = 0; $i <= $num; $i++) {
+            $temp = $i;
+            $bits = 0;
+            
+            for ($j = 0; $j < 32; $j++) {
+                if ($temp & 1) $bits++;
+                
+                $temp >>= 1;
+            }
+            
+            $sol[] = $bits;
+        }
+        
+        return $sol;
+    }
+}
