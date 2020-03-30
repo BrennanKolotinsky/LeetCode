@@ -1,0 +1,34 @@
+class Solution {
+    public List<Integer> selfDividingNumbers(int left, int right) {
+        ArrayList aList = new ArrayList();
+        for (int i = left; i <= right; i++) {
+    
+            int tmp = i;
+            Boolean divisible = true;
+            
+            while (tmp > 0) {
+                
+                // if it contains a zero, it's not going to ever be included
+                if (tmp % 10 != 0) {
+                    // see if the specific digit is in the range
+                    if (i % (tmp % 10) != 0) {
+                        divisible = false;
+                        break;
+                    };
+                } else {
+                    divisible = false;
+                    break;
+                }
+                
+                tmp /= 10;
+            }
+
+            
+            if (divisible == true) {
+                aList.add(i);
+            }
+        }
+        
+        return aList;
+    }
+}
