@@ -1,0 +1,20 @@
+class Solution {
+    public int binaryGap(int N) {
+        int crntCnt = 0, maxCnt = 0;
+        boolean seenFirstOne = false;
+        for (int i = 0; i < 32; i++) {
+            crntCnt++;
+            if ((N & 1) == 1 && seenFirstOne == true) {
+                if (crntCnt > maxCnt) maxCnt = crntCnt;
+                crntCnt = 0;
+            } else if ((N & 1) == 1 && seenFirstOne == false) {
+                crntCnt = 0;
+                seenFirstOne = true;
+            }
+            
+            N >>= 1;
+        }
+        
+        return maxCnt;
+    }
+}
