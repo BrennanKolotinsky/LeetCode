@@ -1,0 +1,35 @@
+class Solution {
+    public List<Integer> sequentialDigits(int low, int high) {
+        ArrayList<Integer> sol = new ArrayList<Integer>();
+        
+        
+        for (int i = 1; i < 10; i++) {
+            String currSol = String.valueOf(i);
+            helper(currSol, sol, i, low, high);
+        }
+        
+        Collections.sort(sol); // sort them because answers must be in matching order
+        
+        return sol;
+        
+    }
+    
+    public void helper(String currSol, ArrayList<Integer> sol, Integer previousNum, int low, int high) {
+        
+        int numSol = Integer.parseInt(currSol);
+        if (numSol >= low && numSol <= high) {
+            sol.add(numSol);
+        } else if (numSol > high) {
+            System.out.println(numSol);
+            return;
+        }
+        
+        // try every possible integer
+        for (int i = 1; i < 10; i++) {
+            if (i == previousNum + 1) {
+                String tempSol = currSol + String.valueOf(i);
+                helper(tempSol, sol, i, low, high);
+            }
+        }
+    }
+}
