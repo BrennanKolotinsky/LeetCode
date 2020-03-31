@@ -1,0 +1,65 @@
+class Solution {
+
+    /**
+     * @param Integer $N
+     * @param Integer[][] $trust
+     * @return Integer
+     */
+    function findJudge($N, $trust) {
+        
+        
+        // solution #2 -- map out adjacencies
+        if ($N === 1 && $trust === [[]]) return 1;
+        
+        $map = array();
+        
+        for ($i = 0; $i < sizeof($trust); $i++) {
+            $map[$trust[$i][0] - 1][$trust[$i][1] - 1] = 1;
+        }
+        
+        for ($i = 0; $i < $N; $i++) {
+            $count = 1;
+            for ($j = 0; $j < $N; $j++) {
+                if (isset($map[$j][$i])) $count++;
+            }
+            
+            //echo $count;
+            if ($count === $N) {
+                $judge = true;
+                for ($j = 0; $j < $N; $j++) {
+                    if(isset($map[$i][$j])) {
+                        $judge = false;
+                    }
+                }
+                if ($judge === true) return $i + 1;
+            }
+        }
+        
+        return -1;        
+        
+        // one working solution using hash map
+        $map = array();
+        
+        if ($N === 1 & $trust === []) return 1;
+        
+        for ($i = 0; $i < sizeof($trust); $i++)  {
+            if(isset($map[$trust[$i][0]])) {
+                $map[$trust[$i][0]]['judge'] = 0;
+            } else {
+                $map[$trust[$i][0]] = array('count' => 0, 'judge' => 0);
+            }
+            
+            if(isset($map[$trust[$i][1]])) {
+                $map[$trust[$i][1]]['count']++;
+            } else {
+                $map[$trust[$i][1]] = array('count' => 1, 'judge' => 1);
+            }
+        }
+        
+        foreach ($map as $index => $val) {
+            if ($val['count'] === ($N - 1) && $val['judge'] === 1) return $index;
+        }
+        
+        return -1;
+    }
+}
