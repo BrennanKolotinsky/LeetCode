@@ -1,0 +1,25 @@
+class Solution {
+    public void rotate(int[][] matrix) {
+        // flip vertically AND then flip diagonally
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        
+        // vertical flip half the images
+        for (int i = 0; i < rows / 2; i++) {
+            for (int j = 0; j < cols; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[rows - i - 1][j]; // subtract one for indexing purposes
+                matrix[rows - i - 1][j] = temp;
+            }
+        }
+        
+        // now flip diaganol
+        for (int i = 0; i < rows; i++) {
+            for (int j = i; j < cols; j++) { // j = i to ensure no repeats!
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i]; // subtract one for indexing purposes
+                matrix[j][i] = temp;
+            }
+        }
+    }
+}
