@@ -1,0 +1,41 @@
+class Person {
+    List<Person> connectedPeople; // this will be a list of everyone that trusts them
+    Boolean trusts; // variable to track if they trust someone
+    int pNum = -1; // this is to track the specific person number!
+    
+    public Person(int num) {
+        trusts = false;
+        connectedPeople = new ArrayList<Person>();
+        pNum = num;
+    }
+    
+}
+
+class Solution {
+    public int findJudge(int N, int[][] trust) {
+        Person[] graph = new Person[N];
+        
+        for (int i = 0; i < N; i++) {
+            graph[i] = new Person(i);
+        }
+        
+        // add the connections
+        for (int[] trusting : trust) {
+            int t1 = trusting[0] - 1;
+            int t2 = trusting[1] - 1;
+            
+            Person p1 = graph[t1];
+            Person p2 = graph[t2];
+            p2.connectedPeople.add(p1);
+            p1.trusts = true;
+        }
+        
+        for (Person p : graph) {
+            if (p.connectedPeople.size() == N - 1 && p.trusts == false) {
+                return p.pNum + 1;
+            }
+        }
+        
+        return -1;
+    }
+}
