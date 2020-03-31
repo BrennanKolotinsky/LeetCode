@@ -1,0 +1,49 @@
+class Solution {
+    
+    // this question combines stacks (previous problem) & backtracking
+    
+    public List<String> generateParenthesis(int n) {
+        ArrayList<String> sol = new ArrayList<String>();
+        String currSol = "(";
+        
+        helper(currSol, n, sol);
+        
+        return sol;
+        
+    }
+    
+    public void helper(String currSol, int num, ArrayList<String> sol) {
+        // if we have the proper amount of parantheses let's test if we should add the solution
+        if (currSol.length() == num * 2) {
+            
+            // let's check if the brackets close properly
+            Stack<Character> stackCheck = new Stack<Character>(); // create a stack to check
+            Boolean corr = true;
+            
+            for (int i = 0; i < num * 2; i++) {
+                char c = currSol.charAt(i);
+                
+                if (c == '(') {
+                    stackCheck.push('(');
+                } else {
+                    if (stackCheck.size() == 0) {
+                        corr = false;
+                        break;
+                    } else {
+                        stackCheck.pop();
+                    }
+                }
+            }
+            
+            // if every parathensis has a match, and the order is correct: add the solution
+            if (stackCheck.size() == 0 && corr == true) {
+                sol.add(currSol);    
+            }
+            
+            return;
+        }
+        
+        helper(currSol + "(", num, sol);
+        helper(currSol + ")", num, sol);
+    }
+}
