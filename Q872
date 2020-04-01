@@ -1,0 +1,31 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean leafSimilar(TreeNode root1, TreeNode root2) {
+        ArrayList<Integer> sol1 = new ArrayList<Integer>();
+        ArrayList<Integer> sol2 = new ArrayList<Integer>();
+        helper(root1, sol1);
+        helper(root2, sol2);
+        
+        return sol1.equals(sol2);
+    }
+    
+    public void helper(TreeNode root, ArrayList<Integer> sol) {
+        if (root == null) return;
+        
+        if (root.left == null && root.right == null) {
+            sol.add(root.val);
+            return;
+        }
+        
+        helper(root.left, sol);
+        helper(root.right, sol);
+    }
+}
