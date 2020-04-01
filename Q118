@@ -1,0 +1,33 @@
+class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> sol = new ArrayList<List<Integer>>();
+        
+        ArrayList<Integer> firstRow = new ArrayList<Integer>();
+        if (numRows == 0) return sol;
+        
+        firstRow.add(1);
+        sol.add(firstRow);
+        
+        ArrayList<Integer> prevRow = firstRow;
+        
+        if (numRows == 1) return sol;
+        
+        for (int i = 1; i < numRows; i++) {
+            ArrayList<Integer> row = new ArrayList<Integer>();
+            row.add(1);
+            
+            // skip the last entry hence -1
+            for (int j = 0; j < prevRow.size() - 1; j++) {
+                int num = prevRow.get(j) + prevRow.get(j + 1);
+                row.add(num);
+            }
+            
+            row.add(1);
+            sol.add(row);
+            
+            prevRow = row; // keep previous loop in memory for ease of access
+        }
+        
+        return sol;
+    }
+}
