@@ -1,0 +1,80 @@
+class Solution {
+    
+    // let's backtrack and then verify if the current answer is a palindrome!
+    // NOTICE aba isn't a solution -- the letters need to remain in order
+    // so you EITHER add a letter to the last arraylist, or create a new array list with the letter
+    // once all letters have been placed 
+    public List<List<String>> partition(String s) {
+        List<List<String>> sol = new ArrayList<List<String>>();
+        
+        if (s.length() == 0) return sol;
+        
+        List<String> currSol = new ArrayList<String>();
+        currSol.add(s.substring(0, 1));
+        
+        helper(sol, 1, currSol, s);
+            
+        return sol;
+    }
+    
+    // the index will verify we have placed every answer
+    public void helper(List<List<String>> sol, int ind, List<String> currSol, String s) {
+        if (ind == s.length()) {
+            if (isPalindrome(currSol) == true) {
+                sol.add(currSol);
+            }
+            
+            return;
+        }
+        
+        // get the next letter and add it to the current solution and create a new solution with the letter
+        String ltr;
+        if (ind != s.length()) {
+            ltr = s.substring(ind, ind + 1); // works even on the final character 
+        } else {
+            ltr = s.substring(ind); // works even on the final character 
+        }
+        
+        
+        // let's test the current string and see if its a palindrome -- if it is let's add another option to the recursion -- setting up a new string in the answer
+        String last = currSol.get(currSol.size() - 1); // get the last string and update
+        Boolean isPal = true;
+        
+        for (int i = 0; i < last.length() / 2; i++) {
+            if (last.charAt(i) != last.charAt(last.length() - 1 - i)) {
+                isPal = false;
+            }
+        }
+        
+        if (isPal == true) {
+            List<String> currSol2 = new ArrayList<String>();
+        
+            // shallow clone existing solution
+            for (String curr : currSol) {
+                currSol2.add(curr);
+            }
+
+            currSol2.add(ltr);
+            helper(sol, ind + 1, currSol2, s);
+        }
+        
+        // regardless let's push the new character on the latest solution
+        currSol.set(currSol.size() - 1, last + ltr);
+        helper(sol, ind + 1, currSol, s);
+    }
+    
+    // loop through every string and determine if they all are palindromes
+    public Boolean isPalindrome(List<String> currSol) {
+        
+        for (String s : currSol) {
+            for (int i = 0; i < s.length() / 2; i++) {
+                if (s.charAt(i) != s.charAt(s.length() - 1 - i)) {
+                    return false;
+                }
+            }
+        }
+        
+        
+        return true;
+    }
+}
