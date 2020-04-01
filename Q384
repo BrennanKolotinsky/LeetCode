@@ -1,0 +1,41 @@
+class Solution {
+    
+    private int[] orig;
+    private int[] shuffled;
+
+    public Solution(int[] nums) {
+        
+        orig = nums.clone();
+        shuffled = nums;
+    }
+    
+    /** Resets the array to its original configuration and return it. */
+    public int[] reset() {
+        shuffled = orig;
+        orig = orig.clone();
+        
+        return orig;
+    }
+    
+    /** Returns a random shuffling of the array. */
+    public int[] shuffle() {
+        for (int i = 0; i < this.shuffled.length; i++) {
+            Random randomizer = new Random();
+            int rand = randomizer.nextInt(shuffled.length);
+            
+            int temp = shuffled[rand];
+            shuffled[rand] = shuffled[i];
+            shuffled[i] = temp;
+        }
+        
+        
+        return shuffled;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int[] param_1 = obj.reset();
+ * int[] param_2 = obj.shuffle();
+ */
