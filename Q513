@@ -9,9 +9,7 @@
  */
 class Solution {
     public int findBottomLeftValue(TreeNode root) {
-        int[] sol = new int[2]; // this will store the lowest depth, and the largest point at it respectively
-        sol[0] = 0;
-        sol[1] = root.val;
+        int[] sol = new int[]{0, root.val}; // this will store the lowest depth, and the largest point at it respectively
         
         helper(0, root, sol);
         
