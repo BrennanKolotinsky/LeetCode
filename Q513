@@ -1,0 +1,33 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+        int[] sol = new int[2]; // this will store the lowest depth, and the largest point at it respectively
+        sol[0] = 0;
+        sol[1] = root.val;
+        
+        helper(0, root, sol);
+        
+        return sol[1];
+    }
+    
+    public void helper(int depth, TreeNode root, int[] sol) {
+        if (root == null) return;
+        
+        // found a new depth
+        if (depth > sol[0]) {
+            sol[0] = depth;
+            sol[1] = root.val;
+        }
+        
+        helper(depth + 1, root.left, sol);
+        helper(depth + 1, root.right, sol);
+    }
+}
