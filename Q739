@@ -1,0 +1,24 @@
+class Solution {
+    public int[] dailyTemperatures(int[] T) {
+        Stack<Integer> stack = new Stack<Integer>();
+        int len = T.length;
+        int[] sol = new int[len];
+        
+        
+        for (int i = 0; i < len; i++) {
+            // check the top in the stack and compare to the current, if the current is larger, let's pop it and add to solution AND repeat this proccess
+            while(stack.isEmpty() == false && T[stack.peek()] < T[i]) {
+                // System.out.println("I: "+i);
+                // stack.forEach(k->{
+                //     System.out.println(""+k);
+                // });
+                int idx = stack.pop();
+                sol[idx] = i - idx;  
+            }
+            
+            stack.push(i);
+        }
+        
+        return sol;
+    }
+}
