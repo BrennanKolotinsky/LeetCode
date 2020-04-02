@@ -1,0 +1,34 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    
+    // let's just track depth and put it in an int[], then return the last value
+    public int deepestLeavesSum(TreeNode root) {
+        List<Integer> depthSum = new ArrayList<>();
+        
+        helper(root, depthSum, 0);
+        
+        return depthSum.get(depthSum.size() - 1);
+    }
+    
+    public void helper(TreeNode root, List<Integer> sol, int depth) {
+        if (root == null) return;
+        
+        // compare the depth to see if we hit a new layer
+        if (sol.size() <= depth) {
+            sol.add(root.val);
+        } else {
+            sol.set(depth, sol.get(depth) + root.val);
+        }
+        
+        helper(root.left, sol, depth + 1);
+        helper(root.right, sol, depth + 1);
+    } 
+}
