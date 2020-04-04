@@ -1,0 +1,46 @@
+class MinStack {
+    
+    HashMap<Integer, Integer> map;
+    int total = 0;
+
+    /** initialize your data structure here. */
+    public MinStack() {
+        map = new HashMap<Integer, Integer>();
+    }
+    
+    public void push(int x) {
+        total++;
+        map.put(total, x);
+    }
+    
+    // remove the last element (LIFO)
+    public void pop() {
+        if (total > 0) {
+            // let's adjust the keys
+            map.remove(total);   
+            total--;
+        }
+    }
+    
+    public int top() {
+        return map.get(total);
+    }
+    
+    public int getMin() {
+        int min = Integer.MAX_VALUE;
+        for (int i = 1; i <= total; i++) {
+            min = Math.min(map.get(i), min);
+        } 
+        
+        return min;
+    }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
