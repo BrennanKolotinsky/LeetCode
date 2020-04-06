@@ -10,7 +10,6 @@ class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         Stack<Integer> st1 = new Stack<Integer>();
         Stack<Integer> st2 = new Stack<Integer>();
-        Stack<Integer> st3 = new Stack<Integer>();
         
         while (l1 != null) {
             st1.push(l1.val);
@@ -25,11 +24,15 @@ class Solution {
         int carry = 0;
         int val = 0;
         
+        ListNode solHead = null, tmpSol = solHead;
+        
         while (st2.empty() == false && st1.empty() == false) {
             val = st1.pop() + st2.pop() + carry;
             carry = val / 10; // if its over 10, you'll get one
             
-            st3.push(val % 10);
+            tmpSol = new ListNode(val % 10);
+            tmpSol.next = solHead;
+            solHead = tmpSol;
         }
         
         if (st2.empty() == true && st1.empty() == false) {
@@ -37,7 +40,9 @@ class Solution {
                 val = st1.pop() + carry;
                 carry = val / 10;
                 
-                st3.push(val % 10);
+                tmpSol = new ListNode(val % 10);
+                tmpSol.next = solHead;
+                solHead = tmpSol;
             }
         }
         
@@ -46,23 +51,18 @@ class Solution {
                 val = st2.pop() + carry;
                 carry = val / 10;
                 
-                st3.push(val % 10);
+                tmpSol = new ListNode(val % 10);
+                tmpSol.next = solHead;
+                solHead = tmpSol;
             }
         }
         
         if (carry == 1) {
-            st3.push(1);
+            tmpSol = new ListNode(1);
+            tmpSol.next = solHead;
+            solHead = tmpSol;
         }
         
-        ListNode sol = new ListNode(st3.pop());
-        ListNode tmp = sol;
-        
-        while (st3.empty() == false) {
-            ListNode next = new ListNode(st3.pop());
-            tmp.next = next;
-            tmp = next;
-        }
-        
-        return sol;
+        return solHead;
     }
 }
