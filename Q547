@@ -1,0 +1,26 @@
+// DFS
+class Solution {
+    public int findCircleNum(int[][] M) {
+        
+        int[] sol = new int[M.length];
+        
+        int total = 0;
+        for (int i = 0; i < M.length; i++) {
+            if (sol[i] == 0) {
+                helper(sol, M, i);
+                total++;
+            }
+        }
+        
+        return total;
+    }
+    
+    public void helper(int[] sol, int[][] M, int curr) {        
+        for (int i = 0; i < M.length; i++) {
+            if (sol[i] == 0 && M[curr][i] == 1) {
+                sol[i] = 1;
+                helper(sol, M, i);
+            }
+        }
+    }
+}
