@@ -1,0 +1,81 @@
+class Solution {
+    public int numRookCaptures(char[][] board) {
+        
+        int x = -1;
+        int y = -1;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 'R') {
+                    x = i;
+                    y = j;
+                    break;
+                }
+            }    
+        }
+        
+        if (x == -1 || y == -1) return 0;
+        
+        int caps = 0;
+        int tmpX = x - 1;
+        
+        // check up
+        while (tmpX >= 0) {
+            
+            if (board[tmpX][y] == 'p') {
+                caps++;
+                break;
+            } else if (board[tmpX][y] != '.') {
+                break;
+            }
+                
+            tmpX--;
+        }
+        
+        tmpX = x + 1;
+        
+        // check down
+        while (tmpX <= 7) {
+            
+            if (board[tmpX][y] == 'p') {
+                caps++;
+                break;
+            } else if (board[tmpX][y] != '.') {
+                break;
+            }
+                
+            tmpX++;
+        }
+        
+        int tmpY = y - 1;
+        
+        // check left
+        while (tmpY >= 0) {
+            
+            if (board[x][tmpY] == 'p') {
+                caps++;
+                break;
+            } else if (board[x][tmpY] != '.') {
+                break;
+            }
+                
+            tmpY--;
+        }
+        
+        tmpY = y + 1;
+        
+        // check right
+        while (tmpY <= 7) {
+            
+            if (board[x][tmpY] == 'p') {
+                caps++;
+                break;
+            } else if (board[x][tmpY] != '.') {
+                break;
+            }
+                
+            tmpY++;
+        }
+        
+        return caps;
+    }
+}
