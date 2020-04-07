@@ -1,0 +1,80 @@
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        
+        if (grid.length == 0) return 0;
+        
+        int totalOranges = 0;
+        int totalInfected = 0;
+        Queue<int[]> queue = new LinkedList<int[]>();
+        
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == 0) continue;   
+                
+                if (grid[i][j] == 2) {
+                    queue.offer(new int[]{i, j});
+                    totalInfected++;
+                }
+                
+                totalOranges++;
+            }
+        }
+        
+        // all oranges already infected
+        if (totalOranges == totalInfected) return 0;
+        
+        int moves = -1;
+        while (queue.size() != 0) {
+            System.out.println(totalInfected);
+            moves++;
+            
+            int size = queue.size();
+            for (int z = 0; z < size; z++) {
+                int[] curr = queue.poll();
+                int i = curr[0];
+                int j = curr[1];
+                
+                // check up, left, right, down
+                if (i - 1 != -1) {
+                    if (grid[i - 1][j] == 1) {
+                        grid[i - 1][j] = 2;
+                        queue.offer(new int[]{i - 1, j});
+                        totalInfected++;
+                    }
+                }
+                
+                if (i + 1 < grid.length) {
+                    if (grid[i + 1][j] == 1) {
+                        grid[i + 1][j] = 2;
+                        queue.offer(new int[]{i + 1, j});
+                        totalInfected++;
+                    }
+                }
+                
+                if (j - 1 != -1) {
+                    if (grid[i][j - 1] == 1) {
+                        grid[i][j - 1] = 2;
+                        queue.offer(new int[]{i, j - 1});
+                        totalInfected++;
+                    }
+                }
+                
+                if (j + 1 < grid[i].length) {
+                    if (grid[i][j + 1] == 1) {
+                        grid[i][j + 1] = 2;
+                        queue.offer(new int[]{i, j + 1});
+                        totalInfected++;
+                    }
+                }
+                
+            }
+        }
+        
+        if (totalInfected != totalOranges) {
+            return -1;    
+        } else {
+            return moves;
+        }
+        
+    }
+}
