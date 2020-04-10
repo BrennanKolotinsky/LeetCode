@@ -1,46 +1,59 @@
 class Solution {
     public int lastStoneWeight(int[] stones) {
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>((a, b)-> b - a);
         
-        if (stones.length == 0) return 0;
-        
-        int stonesLeft = stones.length;
-        int x = -1;
-        int y = -1;
-        
-        while (stonesLeft > 1) {
-            x = -1;
-            y = -1;
-            int xPos = -1;
-            int yPos = -1;
-            
-            for (int i = 0; i < stones.length; i++) {
-                if(stones[i] > x) {
-                    y = x;
-                    yPos = xPos;
-                    x = stones[i];
-                    xPos = i;
-                } else if (stones[i] > y) {
-                    y = stones[i];
-                    yPos = i;
-                }
-            }
-            
-            if (x == y) {
-                stonesLeft -= 2;
-                stones[xPos] = -1;
-                stones[yPos] = -1;
-            } else {
-                stonesLeft--;
-                stones[xPos] = x - y;
-                stones[yPos] = -1;
-            }
+        // add all values to the priority queue
+        for (int a : stones) {
+            pq.offer(a);
         }
         
-        int max = 0;
-        for (int i = 0; i < stones.length; i++) {
-            max = Math.max(max, stones[i]);
+        while (pq.size() > 1) {
+            pq.offer(pq.poll() - pq.poll());
         }
         
-        return max;
+        return pq.poll();
+        
+        // brute force
+//         if (stones.length == 0) return 0;
+        
+//         int stonesLeft = stones.length;
+//         int x = -1;
+//         int y = -1;
+        
+//         while (stonesLeft > 1) {
+//             x = -1;
+//             y = -1;
+//             int xPos = -1;
+//             int yPos = -1;
+            
+//             for (int i = 0; i < stones.length; i++) {
+//                 if(stones[i] > x) {
+//                     y = x;
+//                     yPos = xPos;
+//                     x = stones[i];
+//                     xPos = i;
+//                 } else if (stones[i] > y) {
+//                     y = stones[i];
+//                     yPos = i;
+//                 }
+//             }
+            
+//             if (x == y) {
+//                 stonesLeft -= 2;
+//                 stones[xPos] = -1;
+//                 stones[yPos] = -1;
+//             } else {
+//                 stonesLeft--;
+//                 stones[xPos] = x - y;
+//                 stones[yPos] = -1;
+//             }
+//         }
+        
+//         int max = 0;
+//         for (int i = 0; i < stones.length; i++) {
+//             max = Math.max(max, stones[i]);
+//         }
+        
+//         return max;
     }
 }
