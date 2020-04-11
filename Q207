@@ -1,0 +1,58 @@
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        
+        // [[0, 1]] -- to take course 0 you must take course 1
+        
+        // let's create a hashmap and an int array containing the number of courses AND the specific courses required
+        int[] arr = new int[numCourses]; // the number of prereqs remaining
+        HashMap<Integer, Set<Integer>> map = new HashMap<Integer, Set<Integer>>();
+        
+        for (int i = 0; i < prerequisites.length; i++) {
+            arr[prerequisites[i][0]]++;
+            
+            if (map.containsKey(prerequisites[i][0])) {
+                map.get(prerequisites[i][0]).add(prerequisites[i][1]);
+            } else {
+                map.put(prerequisites[i][0], new HashSet<Integer>());
+                map.get(prerequisites[i][0]).add(prerequisites[i][1]);
+            }
+        }
+        
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == 0) {
+                helper(i, arr, map);
+            }
+        }
+        
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == 0) {
+                helper(i, arr, map);
+            }
+        }
+        
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == 1) return false;
+        }
+        
+        return true;
+    }
+    
+    // check each time to see if a requirement lifted, is all of the requirements
+    private void helper(int courseNum, int[] arr, HashMap<Integer, Set<Integer>> map) {
+        
+        for (int i = 0; i < arr.length; i++) {
+            if (map.containsKey(i)) {
+                if (map.get(i).contains(courseNum) == true) {
+                    
+                    map.get(i).remove(courseNum);
+                    arr[i]--;
+
+                    // if we just removed the last element
+                    if (arr[i] == 0) {
+                        helper(i, arr, map);
+                    }
+                }
+            }
+        }
+    }
+}
