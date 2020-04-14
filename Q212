@@ -1,0 +1,61 @@
+class TrieNode {
+    public TrieNode[] children = new TrieNode[26];
+    public boolean isWord = false;
+    public String fullWord; // this makes it easy to track the entirety of the word -- to add to the arraylist
+    public TrieNode() {
+    }
+}
+
+class Solution {
+    
+    public TrieNode root;
+    
+    public List<String> findWords(char[][] board, String[] words) {
+        root = new TrieNode();
+        ArrayList<String> sol = new ArrayList<>();
+        
+        // add all the words
+        for (String word : words)
+            add(word);
+        
+        for (int i = 0; i < board.length; i++)
+            for (int j = 0; j < board[0].length; j++)
+                dfs(i, j, board, root, sol);
+        
+        return sol;
+    }
+    
+    public void dfs(int i, int j, char[][] board, TrieNode node, ArrayList<String> sol) {        
+        
+        if (node.isWord && sol.contains(node.fullWord) == false)
+            sol.add(node.fullWord);
+        
+        if (i == -1 || i == board.length || j == -1 || j == board[0].length || board[i][j] == ' ' || node.children[board[i][j] - 'a'] == null)
+            return;
+        
+        node = node.children[board[i][j] - 'a'];
+        char tmp = board[i][j];
+        board[i][j] = ' ';
+
+        dfs(i + 1, j, board, node, sol); 
+        dfs(i - 1, j, board, node, sol);
+        dfs(i, j + 1, board, node, sol);
+        dfs(i, j - 1, board, node, sol);
+        
+        board[i][j] = tmp; // reset
+    }
+    
+    public void add(String word) {
+        TrieNode ws = root;
+        
+        for (char c : word.toCharArray()) {
+            if (ws.children[c - 'a'] == null) {
+                ws.children[c - 'a'] = new TrieNode();
+            }
+            ws = ws.children[c - 'a'];
+        }
+        
+        ws.isWord = true;
+        ws.fullWord = word;
+    }
+}
