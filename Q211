@@ -1,0 +1,83 @@
+class TrieNode {
+    
+    public TrieNode[] children = new TrieNode[26];
+    public Boolean isWord = false;
+    
+    public TrieNode() {
+    }
+}
+
+class WordDictionary {
+    
+    public TrieNode root;
+
+    /** Initialize your data structure here. */
+    public WordDictionary() {
+        root = new TrieNode();
+        // addWord("at");
+        // addWord("and");
+        // addWord("an");
+        // search("a");
+    }
+    
+    /** Adds a word into the data structure. */
+    public void addWord(String word) {
+        TrieNode ws = root;
+        for (int i = 0; i < word.length(); i++) {
+            char curr = word.charAt(i);
+            if (ws.children[curr - 'a'] == null) {
+                ws.children[curr - 'a'] = new TrieNode();
+            }
+            
+            ws = ws.children[curr - 'a'];
+        }
+        
+        ws.isWord = true;
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    public boolean search(String word) {
+        Queue<TrieNode> q = new LinkedList<>();
+        q.offer(root);
+        
+        int j = 0;
+        
+        while (!q.isEmpty() && j <= word.length()) {
+            
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                TrieNode curr = q.poll();    
+                
+                if (j == word.length()) {
+                    if (curr.isWord == true) {
+                        return true;
+                    } else {
+                        continue;
+                    }
+                }
+                
+                char c = word.charAt(j);
+                
+                if (c == '.') {
+                    for (TrieNode child : curr.children) {
+                        if (child != null) {
+                            q.offer(child); 
+                        }
+                    }
+                } else if (curr.children[c - 'a'] != null) {
+                    q.offer(curr.children[c - 'a']);
+                }
+            }
+            j++;
+        }
+        
+        return false;
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */
