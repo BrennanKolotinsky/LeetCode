@@ -1,0 +1,106 @@
+class TrieNode {
+    
+    public TrieNode[] children = new TrieNode[26];
+    boolean isWord = false;
+    
+    public TrieNode() {
+    }
+}
+
+class Solution {
+    
+    public TrieNode root;
+    
+    public List<String> findAllConcatenatedWordsInADict(String[] words) {
+        
+        List<String> sol = new ArrayList<>();
+        int[] ch = new int[26]; // single chars!
+        
+        if (words.length == 1)
+            return sol;
+        
+        root = new TrieNode();
+        
+        // add all the words!
+        int i = 0;
+        for (String word : words) {
+            if (!word.equals("")) {
+                boolean quickAdd = insert(word);
+                
+                if (word.length() == 1) {
+                    ch[word.charAt(0) - 'a'] = 1;
+                    words[i] = "";
+                } else {
+                    if (quickAdd == true && ch[word.charAt(0) - 'a'] == 1) {
+                        sol.add(word);
+                        words[i] = "";
+                    }
+                } 
+            }
+            i++;
+        }
+            
+        
+        for (String word : words)
+            if (!word.equals(""))
+                dfs(root, null, word, sol, 0);
+                
+        return sol;
+    }
+    
+    // loop through the words -- see if they are a combination of another word by checking isWord and seeing if it appears twice, each time you find it increment
+    public void dfs(TrieNode node, TrieNode node2, String word, List<String> sol, int pos) {
+        // if we've already added the solution exit the search!
+        if (sol.contains(word) == true)
+            return;
+        
+        // we are on the final character
+        if (pos == word.length() - 1) {
+            if (node2 == null) {
+            } else
+                if (node2.children[word.charAt(pos) - 'a'] != null)
+                    if (node2.children[word.charAt(pos) - 'a'].isWord == true)
+                            sol.add(word);
+            return;
+        } else {
+            char c = word.charAt(pos);
+            pos++;
+            node = node.children[c - 'a']; // advance the main node
+            
+            if (node2 != null) {
+                if (node2.children[c - 'a'] == null)
+                    return;
+                
+                node2 = node2.children[c - 'a'];
+                
+                dfs(node, node2, word, sol, pos);
+                if (node2.isWord == true)
+                    dfs(node, root, word, sol, pos);
+            
+            // if we find a word let's add it on
+            } else {
+                dfs(node, null, word, sol, pos);
+                if (node.isWord == true)
+                    dfs(node, root, word, sol, pos);
+            }
+        }
+    }
+    
+    // return a BOOLEAN for whether the string is formed with one type of character
+    public boolean insert(String word) {
+        TrieNode ws = root;
+        
+        char comp = word.charAt(0);
+        boolean oneChar = true;
+        for (char c : word.toCharArray()) {
+            if (comp != c) oneChar = false;
+            
+            if (ws.children[c - 'a'] == null)
+                ws.children[c - 'a'] = new TrieNode();
+            ws = ws.children[c - 'a'];
+        }
+        
+        ws.isWord = true;
+        return oneChar;
+    }
+}
