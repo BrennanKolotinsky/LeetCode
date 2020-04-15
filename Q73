@@ -1,0 +1,44 @@
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        List<Integer> row = new ArrayList<>();
+        List<Integer> col = new ArrayList<>();
+        
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] == 0) {
+                    row.add(i);
+                    col.add(j);
+                }
+            }
+        }
+        
+        for (int i = 0; i < row.size(); i++) {
+            int zeroRow = row.get(i);
+            int zeroCol = col.get(i);
+            
+            int up = zeroCol - 1;
+            while (up > -1) {
+                matrix[zeroRow][up] = 0;
+                up--;
+            }
+            
+            int down = zeroCol + 1;
+            while (down < matrix[zeroRow].length) {
+                matrix[zeroRow][down] = 0;
+                down++;
+            }
+            
+            int left = zeroRow - 1;
+            while (left > -1) {
+                matrix[left][zeroCol] = 0;
+                left--;
+            }
+            
+            int right = zeroRow + 1;
+            while (right < matrix.length) {
+                matrix[right][zeroCol] = 0;
+                right++;
+            }
+        } 
+    }
+}
