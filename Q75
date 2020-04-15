@@ -1,0 +1,21 @@
+class Solution {
+    public void sortColors(int[] nums) {
+        
+        int p1 = 0, p2 = nums.length - 1, index = 0;
+        
+        while (index <= p2) {
+            if (nums[index] == 0) {
+                int tmp = nums[p1];
+                nums[index] = tmp;
+                nums[p1++] = 0;
+            } else if (nums[index] == 2) {
+                int tmp = nums[p2];
+                nums[index] = tmp;
+                nums[p2--] = 2;
+                index--; // if we find a 2, let's repeat the check
+            }
+            
+            index++;
+        }
+    }
+}
