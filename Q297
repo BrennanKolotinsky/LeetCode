@@ -16,7 +16,9 @@ public class Codec {
         
         Queue<TreeNode> q = new LinkedList<>();
         q.offer(root);
-        String sol = "[";
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
         
         while(q.isEmpty() == false) {
             
@@ -26,7 +28,7 @@ public class Codec {
                 TreeNode curr = q.poll();
                 
                 if (curr != null) {
-                    sol = sol + String.valueOf(curr.val) + ",";
+                    sb.append(String.valueOf(curr.val)).append(",");
                     
                     if (curr.left != null || curr.right != null) {
                         allNull = false; // we found one value at this LEVEL!
@@ -35,7 +37,7 @@ public class Codec {
                     q.offer(curr.left);
                     q.offer(curr.right);
                 } else {
-                    sol = sol + "null,";
+                    sb.append("null,");
                 }
             }
             
@@ -43,10 +45,10 @@ public class Codec {
                 break;
             }
         }
-    
-        System.out.println(sol.substring(0, sol.length() - 1) + "]");
-        
-        return sol.substring(0, sol.length() - 1) + "]"; // pop the last comma
+            
+        sb.setLength(sb.length() - 1); // pop the last comma
+        sb.append("]");
+        return sb.toString();
     }
 
     // Decodes your encoded data to tree.
