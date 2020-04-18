@@ -12,6 +12,8 @@ class Solution {
     
         List<List<Integer>> sol = new ArrayList<>();
         
+        if (root == null) return sol;
+        
         Deque<TreeNode> q = new LinkedList<>();
         q.offer(root);
         int depth = 0;
@@ -25,24 +27,18 @@ class Solution {
                 
                 TreeNode curr = q.pop();
                 
-                if (curr != null) {
-                    if (depth >= sol.size()) {
-                        tmp = new ArrayList<>();
-                        tmp.add(curr.val);
-                        sol.add(tmp);
-                    } else {
-                        sol.get(depth).add(curr.val);
-                    }
-                    
+                if (depth % 2 == 0)
+                    tmp.add(curr.val);
+                else
+                    tmp.add(0, curr.val);
+
+                if (curr.left != null)
                     q.offer(curr.left);
+                if (curr.right != null)
                     q.offer(curr.right);
-                }
             }
             
-            if(depth % 2 == 1) { //reverse data
-                Collections.reverse(tmp);
-            }
-            
+            sol.add(tmp);
             depth++;
         }
         
