@@ -1,30 +1,13 @@
 class Solution {
     public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int end = m + n - 1, tail1 = m - 1, tail2 = n - 1;
         
-        if (n == 0) return;
+        while (tail1 >= 0 && tail2 >= 0) {
+            nums1[end--] = (nums1[tail1] > nums2[tail2]) ? nums1[tail1--] : nums2[tail2--];         
+        }
         
-        int i;
-        for (i = 0; i < m; i++) {
-            if (nums1[i] > nums2[0]) {
-                int tmp = nums1[i];
-                nums1[i] = nums2[0];
-                nums2[0] = tmp; // insert at the start and now re-sort
-                
-                for (int j = 1; j < n; j++) {
-                    if (nums2[j] < nums2[j - 1]) {
-                        nums2[j - 1] = tmp;
-                        nums2[j - 1] = nums2[j];
-                        nums2[j] = tmp;
-                    }      
-                    else
-                        break; // we are back to sorted order
-                }
-            }
-        } 
-        
-        // place the extra elements at the end
-        for (int j = 0; j < n; j++) {
-            nums1[i + j] = nums2[j];
+        while (tail2 >= 0) {
+            nums1[end--] = nums2[tail2--];
         }
     }
 }
