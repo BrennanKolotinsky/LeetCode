@@ -8,11 +8,21 @@ class Solution {
             if (nums1[i] > nums2[0]) {
                 int tmp = nums1[i];
                 nums1[i] = nums2[0];
-                nums2[0] = tmp;
-                Arrays.sort(nums2);
+                nums2[0] = tmp; // insert at the start and now re-sort
+                
+                for (int j = 1; j < n; j++) {
+                    if (nums2[j] < nums2[j - 1]) {
+                        nums2[j - 1] = tmp;
+                        nums2[j - 1] = nums2[j];
+                        nums2[j] = tmp;
+                    }      
+                    else
+                        break; // we are back to sorted order
+                }
             }
         } 
-                
+        
+        // place the extra elements at the end
         for (int j = 0; j < n; j++) {
             nums1[i + j] = nums2[j];
         }
