@@ -1,0 +1,64 @@
+class TrieNode {
+    
+    boolean isWord;
+    TrieNode[] children;
+    
+    public TrieNode() {
+        isWord = false;
+        children = new TrieNode[26];
+    }
+    
+}
+
+class Solution {
+
+    public TrieNode root;
+    
+    // confusing solution
+    public boolean wordBreak(String s, List<String> wordDict) {     
+        
+        root = new TrieNode();
+        
+        for (String word : wordDict) {
+            insertWord(word);
+        }
+        
+        
+        boolean[] f = new boolean[s.length() + 1];
+
+        f[0] = true; // default value, if the string is empty!
+
+        // two loops give us two pointers
+        for (int i = 0; i < s.length(); i++){
+            if (!f[i])
+                continue;
+            
+            TrieNode curr = root;
+            int j = i;
+            // limit by i to avoid overflow!
+            while(j < s.length() && curr.children[s.charAt(j) - 'a'] != null) {
+                
+                curr = curr.children[s.charAt(j++) - 'a']; // iterate to the next character -- j will be at least ONE ahead of i!
+                
+                if(curr.isWord){
+                    f[j] = true;
+                }
+            }
+        }
+
+        return f[s.length()];
+    }
+    
+    public void insertWord(String word) {
+        
+        TrieNode ws = root;
+        for (char c : word.toCharArray()) {
+            if (ws.children[c - 'a'] == null)
+                ws.children[c - 'a'] = new TrieNode();
+            
+            ws = ws.children[c - 'a'];
+        }
+        
+        ws.isWord = true;
+    }
+}
