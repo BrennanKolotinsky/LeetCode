@@ -1,0 +1,60 @@
+// UNION FIND
+// Negative numbers represent a PARENT element
+// Negative is the RANK -- number of elements under the parent
+
+class Solution {
+    
+    public int[] findRedundantConnection(int[][] edges) {
+        
+        DSU uf = new DSU(edges.length);
+        
+        // make all the connections
+        for (int[] conn : edges) {
+            if (uf.union(conn[0] - 1, conn[1] - 1))
+                return conn;
+        }
+                
+        return null;
+    }
+}
+
+class DSU {
+    
+    public int[] path;
+    
+    public DSU(int n) {
+        path = new int[n];
+        Arrays.fill(path, -1); // all elements are parents
+    }
+    
+    public int find(int p) {
+        while (path[p] >= 0) {
+            p = find(path[p]);
+        }
+        
+        return p;
+    }
+    
+    public boolean union(int p1, int p2) {
+        
+        int parent1 = find(p1);
+        int parent2 = find(p2);
+        
+        // found a cycle
+        if (parent1 == parent2)
+            return true;
+        
+        // parents2 is a smaller negative number
+        if (path[parent1] <= path[parent2]) {
+            path[parent1] +=  path[parent2]; // new rank
+            path[parent2] = parent1; // new parent element
+            path[p2] = parent1; // increases efficiency a little bit -- collapsing find!
+        } else {
+            path[parent2] +=  path[parent1];
+            path[parent1] = parent2;
+            path[p1] = parent2;
+        }
+        
+        return false;
+    }
+}
