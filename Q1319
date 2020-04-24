@@ -1,0 +1,62 @@
+class Solution {
+    public int makeConnected(int n, int[][] connections) {
+        // not enough cables
+        if (n - 1 > connections.length)
+            return -1;
+        
+        DS uf = new DS(n);
+        
+        // let's connect all of the wires and count the number of parent elements
+        for (int[] conn : connections) {
+            uf.union(conn[0], conn[1]);
+        }
+        
+        return uf.numParents() - 1;
+    }
+}
+
+class DS {
+    
+    int[] path;
+    
+    public DS(int n) {
+        path = new int[n];
+        Arrays.fill(path, -1);
+    }
+    
+    public void union(int p1, int p2) {
+        int parent1 = find(p1);
+        int parent2 = find(p2);
+
+        if (parent1 == parent2)
+            return;
+        
+        if (path[parent1] <= path[parent2]) {
+            path[parent1] += path[parent2];
+            path[parent2] = parent1;
+            path[p2] = parent1;
+        } else {
+            path[parent2] += path[parent1];
+            path[parent1] = parent2;
+            path[p1] = parent2;
+        }
+    }
+    
+    public int find(int p) {
+        while (path[p] >= 0) {
+            p = path[p];
+        }
+        
+        return p;
+    }
+    
+    public int numParents() {
+        int cnt = 0;
+        for (int i : path) {
+            if (i < 0)
+                cnt++;
+        }
+        
+        return cnt;
+    }
+}
