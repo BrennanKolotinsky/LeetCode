@@ -8,11 +8,10 @@ class Solution {
         
         DSU uf = new DSU(edges.length);
         
-        // make all the connections
-        for (int[] conn : edges) {
+        // make all the connections -- first connection found causing a cycle is surprisingly the last one causing the loop (works out mathematically due to the number of edges being added)
+        for (int[] conn : edges)
             if (uf.union(conn[0] - 1, conn[1] - 1))
                 return conn;
-        }
                 
         return null;
     }
