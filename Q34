@@ -1,0 +1,36 @@
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        // BINARY SEARCH -- as soon as we find let's just expand slowly
+        int low = 0, high = nums.length - 1;
+        int mid = 0;
+        boolean found = false;
+        
+        while (low <= high) {
+            
+            mid = low + (high - low) / 2;
+            
+            if (nums[mid] == target) {
+                found = true;
+                break;
+            }                
+            else if (nums[mid] < target)
+                low = mid + 1;
+            else
+                high = mid - 1; 
+        }
+        
+        if (!found)
+            return new int[]{-1,-1};
+        
+        low = mid;
+        high = mid;
+        
+        while (low > 0 && nums[low - 1] == target)
+            low--;
+        
+        while (high < nums.length - 1 && nums[high + 1] == target)
+            high++;
+        
+        return new int[]{low, high};
+    }
+}
