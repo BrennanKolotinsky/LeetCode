@@ -1,36 +1,77 @@
 class Solution {
+//     public int[] searchRange(int[] nums, int target) {
+//         // BINARY SEARCH -- as soon as we find let's just expand slowly
+//         int low = 0, high = nums.length - 1;
+//         int mid = 0;
+//         boolean found = false;
+        
+//         while (low <= high) {
+            
+//             mid = low + (high - low) / 2;
+            
+//             if (nums[mid] == target) {
+//                 found = true;
+//                 break;
+//             }                
+//             else if (nums[mid] < target)
+//                 low = mid + 1;
+//             else
+//                 high = mid - 1; 
+//         }
+        
+//         if (!found)
+//             return new int[]{-1,-1};
+        
+//         low = mid;
+//         high = mid;
+        
+//         while (low > 0 && nums[low - 1] == target)
+//             low--;
+        
+//         while (high < nums.length - 1 && nums[high + 1] == target)
+//             high++;
+        
+//         return new int[]{low, high};
+//     }
+// }
+
+class Solution {
     public int[] searchRange(int[] nums, int target) {
         // BINARY SEARCH -- as soon as we find let's just expand slowly
+        // if we only do while(low < high) AND only advance the low by mid + 1 (not high = mid - 1) we will find the leftmost index (with an = target -- without we find rightmost)
+        // EXPLORE INDEXES
         int low = 0, high = nums.length - 1;
         int mid = 0;
-        boolean found = false;
         
-        while (low <= high) {
+        // find leftmost occurence -- low
+        while (low < high) {
             
             mid = low + (high - low) / 2;
             
-            if (nums[mid] == target) {
-                found = true;
-                break;
-            }                
-            else if (nums[mid] < target)
-                low = mid + 1;
+            if (nums[mid] >= target)
+                high = mid; 
             else
-                high = mid - 1; 
+                low = mid + 1;
         }
         
-        if (!found)
+        if (nums.length == 0 || nums[low] != target)
             return new int[]{-1,-1};
         
-        low = mid;
-        high = mid;
+        int savedEnd = low;
+        low = 0;
+        high = nums.length;
         
-        while (low > 0 && nums[low - 1] == target)
-            low--;
+        // how to find the rightmost occurence -- low - 1 AND USES high = nums.length -- rather than nums.length - 1
+        while (low < high) {
+            
+            mid = low + (high - low) / 2;
+            
+            if (nums[mid] > target)
+                high = mid; 
+            else
+                low = mid + 1;
+        }
         
-        while (high < nums.length - 1 && nums[high + 1] == target)
-            high++;
-        
-        return new int[]{low, high};
+        return new int[]{savedEnd, low - 1};
     }
 }
