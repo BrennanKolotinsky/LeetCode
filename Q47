@@ -3,42 +3,30 @@ class Solution {
         // backtrack this shit
         boolean[] added = new boolean[nums.length]; // false indicates it hasn't been added
         List<List<Integer>> sol = new ArrayList<>();
-        backtrack(sol, new ArrayList<>(), added, nums);
+        dfs(sol, new ArrayList<>(), added, nums);
         
         return sol;
     }
     
-    public void backtrack(List<List<Integer>> sol, List<Integer> curr, boolean[] added, int[] nums) {
+    public void dfs(List<List<Integer>> sol, List<Integer> curr, boolean[] added, int[] nums) {
         
         if (curr.size() == nums.length) {
-            // check if valid solution
-            if (!checkIfAlreadyAdded(sol, curr))
-                sol.add(curr);
+            sol.add(new ArrayList<Integer>(curr));
             return;
         }
         
         for (int i = 0; i < added.length; i++) {
-            if (added[i] == false) {
+            if (!added[i]) {                
                 
-                added[i] = true;
-                
-                // clone the array
-                List<Integer> tmp = clone(curr);
-                
-                tmp.add(nums[i]);
-                backtrack(sol, tmp, added, nums);
-                
-                added[i] = false;
+                curr.add(nums[i]);
+                if (!checkIfAlreadyAdded(sol, curr)) {
+                    added[i] = true;
+                    dfs(sol, curr, added, nums);
+                    added[i] = false;
+                }
+                curr.remove(curr.size() - 1);
             }
         }
-    }
-    
-    public List<Integer> clone(List<Integer> curr) {
-        List<Integer> tmp = new ArrayList<>();
-        for(int n : curr) {
-            tmp.add(n);
-        }
-        return tmp;
     }
     
     public boolean checkIfAlreadyAdded(List<List<Integer>> sol, List<Integer> curr) {
@@ -46,10 +34,10 @@ class Solution {
         for (int i = 0; i < sol.size(); i++) {
             List<Integer> check = sol.get(i);
 
-            for (int j = 0; j < check.size(); j++) {
+            for (int j = 0; j < curr.size(); j++) {
                 if (check.get(j) != curr.get(j))
                     break;
-                if (j == check.size() - 1)
+                if (j == curr.size() - 1)
                     alreadyAdded = true;
             }
         }
