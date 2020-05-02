@@ -3,6 +3,7 @@ class Solution {
         // backtrack this shit
         boolean[] added = new boolean[nums.length]; // false indicates it hasn't been added
         List<List<Integer>> sol = new ArrayList<>();
+        Arrays.sort(nums); // REMEMBER TO SORT FOR EASY COMPARISON
         dfs(sol, new ArrayList<>(), added, nums);
         
         return sol;
@@ -16,31 +17,67 @@ class Solution {
         }
         
         for (int i = 0; i < added.length; i++) {
-            if (!added[i]) {                
+            if (!added[i]) {
                 
+                // if we are not on the first element -- prevents index out of range
+                // if our last element is the same as the current one
+                // and we already removed (aka we already tried adding it on this exact run!)
+                if(i > 0 && nums[i-1] == nums[i] && !added[i-1])
+                    continue;
+
                 curr.add(nums[i]);
-                if (!checkIfAlreadyAdded(sol, curr)) {
-                    added[i] = true;
-                    dfs(sol, curr, added, nums);
-                    added[i] = false;
-                }
+                added[i] = true;
+                dfs(sol, curr, added, nums);
+                added[i] = false;
                 curr.remove(curr.size() - 1);
             }
         }
     }
-    
-    public boolean checkIfAlreadyAdded(List<List<Integer>> sol, List<Integer> curr) {
-        boolean alreadyAdded = false;
-        for (int i = 0; i < sol.size(); i++) {
-            List<Integer> check = sol.get(i);
-
-            for (int j = 0; j < curr.size(); j++) {
-                if (check.get(j) != curr.get(j))
-                    break;
-                if (j == curr.size() - 1)
-                    alreadyAdded = true;
-            }
-        }
-        return alreadyAdded;
-    }
 }
+
+class Solution {
+//     public List<List<Integer>> permuteUnique(int[] nums) {
+//         // backtrack this shit
+//         boolean[] added = new boolean[nums.length]; // false indicates it hasn't been added
+//         List<List<Integer>> sol = new ArrayList<>();
+//         dfs(sol, new ArrayList<>(), added, nums);
+        
+//         return sol;
+//     }
+    
+//     public void dfs(List<List<Integer>> sol, List<Integer> curr, boolean[] added, int[] nums) {
+        
+//         if (curr.size() == nums.length) {
+//             sol.add(new ArrayList<Integer>(curr));
+//             return;
+//         }
+        
+//         for (int i = 0; i < added.length; i++) {
+//             if (!added[i]) {                
+                
+//                 curr.add(nums[i]);
+//                 if (!checkIfAlreadyAdded(sol, curr)) {
+//                     added[i] = true;
+//                     dfs(sol, curr, added, nums);
+//                     added[i] = false;
+//                 }
+//                 curr.remove(curr.size() - 1);
+//             }
+//         }
+//     }
+    
+//     public boolean checkIfAlreadyAdded(List<List<Integer>> sol, List<Integer> curr) {
+//         boolean alreadyAdded = false;
+//         for (int i = 0; i < sol.size(); i++) {
+//             List<Integer> check = sol.get(i);
+
+//             for (int j = 0; j < curr.size(); j++) {
+//                 if (check.get(j) != curr.get(j))
+//                     break;
+//                 if (j == curr.size() - 1)
+//                     alreadyAdded = true;
+//             }
+//         }
+//         return alreadyAdded;
+//     }
+// }
