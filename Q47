@@ -1,0 +1,58 @@
+class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        // backtrack this shit
+        boolean[] added = new boolean[nums.length]; // false indicates it hasn't been added
+        List<List<Integer>> sol = new ArrayList<>();
+        backtrack(sol, new ArrayList<>(), added, nums);
+        
+        return sol;
+    }
+    
+    public void backtrack(List<List<Integer>> sol, List<Integer> curr, boolean[] added, int[] nums) {
+        
+        if (curr.size() == nums.length) {
+            // check if valid solution
+            if (!checkIfAlreadyAdded(sol, curr))
+                sol.add(curr);
+            return;
+        }
+        
+        for (int i = 0; i < added.length; i++) {
+            if (added[i] == false) {
+                
+                added[i] = true;
+                
+                // clone the array
+                List<Integer> tmp = clone(curr);
+                
+                tmp.add(nums[i]);
+                backtrack(sol, tmp, added, nums);
+                
+                added[i] = false;
+            }
+        }
+    }
+    
+    public List<Integer> clone(List<Integer> curr) {
+        List<Integer> tmp = new ArrayList<>();
+        for(int n : curr) {
+            tmp.add(n);
+        }
+        return tmp;
+    }
+    
+    public boolean checkIfAlreadyAdded(List<List<Integer>> sol, List<Integer> curr) {
+        boolean alreadyAdded = false;
+        for (int i = 0; i < sol.size(); i++) {
+            List<Integer> check = sol.get(i);
+
+            for (int j = 0; j < check.size(); j++) {
+                if (check.get(j) != curr.get(j))
+                    break;
+                if (j == check.size() - 1)
+                    alreadyAdded = true;
+            }
+        }
+        return alreadyAdded;
+    }
+}
