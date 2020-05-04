@@ -1,0 +1,19 @@
+class Solution {
+    public boolean canJump(int[] nums) {
+        
+        if (nums.length == 0)
+            return true;
+        
+        int biggestJump = nums[0]; // keep track of the furthest we can jump -- if we hit zero in the length return false
+        
+        for (int i = 1; i < nums.length; i++) {
+            
+            if (--biggestJump < 0)
+                return false;
+            
+            biggestJump = Math.max(biggestJump, nums[i]);
+        }
+        
+        return true;
+    }
+}
