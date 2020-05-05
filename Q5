@@ -1,0 +1,31 @@
+class Solution {
+    public String longestPalindrome(String s) {
+        
+        if (s == null || s.length() == 0)
+            return "";
+        
+        int start = 0, end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int odd = helper(s, i, i);
+            int even = helper(s, i, i + 1);
+            
+            int max = Math.max(odd, even);
+            
+            if (max > end - start) {
+                start = i - (max - 1) / 2; // note the -1 -- divided by two to account for odd/even
+                end = i + max / 2 + 1; // note the +1
+            }
+        }
+        
+        return s.substring(start, end);
+    }
+    
+    public int helper(String s, int start, int end) {
+        while (start >= 0 && end < s.length() && s.charAt(start) == s.charAt(end)) {
+            start--;
+            end++;
+        }
+        
+        return end - start - 1; // note the -1
+    }
+}
