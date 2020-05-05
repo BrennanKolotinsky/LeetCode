@@ -12,20 +12,21 @@ class Solution {
             int max = Math.max(odd, even);
             
             if (max > end - start) {
-                start = i - (max - 1) / 2; // note the -1 -- divided by two to account for odd/even
-                end = i + max / 2 + 1; // note the +1
+                start = i - (max - 1) / 2; // note the -1 -- divided by two to account for odd cases
+                end = i + max / 2;
             }
         }
         
-        return s.substring(start, end);
+        return s.substring(start, end + 1); // + 1 due to substring function
     }
     
+    // returns the longest length of the substring
     public int helper(String s, int start, int end) {
         while (start >= 0 && end < s.length() && s.charAt(start) == s.charAt(end)) {
             start--;
             end++;
         }
         
-        return end - start - 1; // note the -1
+        return end - start - 1; // this will return the length as the WHILE loop will repeat one extra time "aa" -- end = 2, start = -1. Total count = 2.
     }
 }
