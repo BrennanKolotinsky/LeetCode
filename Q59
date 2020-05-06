@@ -1,0 +1,44 @@
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int[][] sol = new int[n][n];
+        int right = 1, down = 0, row = 0, col = 0;
+        
+        for (int i = 1; i < (n * n) + 1; i++) {
+            
+            sol[row][col] = i;
+            
+            if (right == 1) {
+                // if we hit the last element let's move downwards next
+                if (col == sol[0].length - 1 || sol[row][col + 1] != 0) {
+                    right = 0;
+                    down = 1;
+                    row++;
+                } else
+                    col++;
+            } else if (down == 1) {
+                if (row == sol.length - 1 || sol[row + 1][col] != 0) {
+                    right = -1;
+                    down = 0;
+                    col--;
+                } else
+                    row++;
+            } else if (right == -1) {
+                if (col == 0 || sol[row][col - 1] != 0) {
+                    right = 0;
+                    down = -1;
+                    row--;
+                } else
+                    col--;
+            } else if (down == -1) {
+                if (row == 0 || sol[row - 1][col] != 0) {
+                    right = 1;
+                    down = 0;
+                    col++;
+                } else
+                    row--;
+            }   
+        }
+        
+        return sol;
+    }
+}
