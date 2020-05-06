@@ -24,7 +24,7 @@ class Solution {
         if (root == null)
             return;
         
-        if (sol.size() <= depth) {
+        if (sol.size() == depth) {
             sol.add(root.val);
         } else {
             sol.set(depth, root.val);    
