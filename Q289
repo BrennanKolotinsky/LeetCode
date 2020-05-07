@@ -1,0 +1,54 @@
+class Solution {
+    public void gameOfLife(int[][] board) {
+        
+        // note -1 indicates previously alive -- 2 indicates was dead and now is alive
+        for (int row = 0; row < board.length; row++)
+            for (int col = 0; col < board[row].length; col++) {
+                
+                int numInRange = checkSurrounding(board, row, col);
+                
+                if (board[row][col] == 0 && numInRange == 3)
+                    board[row][col] = 2;
+                
+                if (board[row][col] == 1 && (numInRange < 2 || numInRange > 3))
+                    board[row][col] = -1;
+            }
+        
+        for (int row = 0; row < board.length; row++)
+            for (int col = 0; col < board[row].length; col++) {
+                                
+                if (board[row][col] == -1)
+                    board[row][col] = 0;
+                
+                if (board[row][col] == 2)
+                    board[row][col] = 1;
+            }
+    }
+    
+    public int validInRange(int[][] board, int row, int col) {
+        if (row < 0 || row == board.length || col < 0 || col == board[0].length || board[row][col] == 0 || board[row][col] == 2)
+            return 0;
+        
+        //if (board[row][col] == 1 || board[row][col] == -1)
+            //return 1;
+        
+        return 1;
+    }
+    
+    public int checkSurrounding(int[][] board, int row, int col) {
+        int total = 0;
+        
+        total += validInRange(board, row - 1, col);
+        total += validInRange(board, row - 1, col - 1);
+        total += validInRange(board, row, col - 1);
+        
+        total += validInRange(board, row + 1, col);
+        total += validInRange(board, row + 1, col + 1);
+        total += validInRange(board, row, col + 1);
+        
+        total += validInRange(board, row - 1, col + 1);
+        total += validInRange(board, row + 1, col - 1);
+        
+        return total;
+    }
+}
