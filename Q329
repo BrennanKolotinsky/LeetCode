@@ -26,29 +26,22 @@ class Solution {
         int tmp = matrix[row][col];
         matrix[row][col] = Integer.MIN_VALUE;
         
-        int up = 0;
+        int max = 0;
         if (row > 0)
-            up = dfs(matrix, row - 1, col, tmp, depth + 1, dp);
+            max = dfs(matrix, row - 1, col, tmp, depth + 1, dp);
         
-        int down = 0;
         if (row < matrix.length - 1)
-            down = dfs(matrix, row + 1, col, tmp, depth + 1, dp);
-            
-        int deepestUpDown = Math.max(up, down);
-        
-        int left = 0;
+            max = Math.max(max, dfs(matrix, row + 1, col, tmp, depth + 1, dp));
+                    
         if (col > 0)
-            left = dfs(matrix, row, col - 1, tmp, depth + 1, dp);
+            max = Math.max(max, dfs(matrix, row, col - 1, tmp, depth + 1, dp));
         
-        int right = 0;
         if (col < matrix[0].length - 1)
-            right = dfs(matrix, row, col + 1, tmp, depth + 1, dp);
-        
-        int deepestLeftRight = Math.max(left, right);
-        
+            max = Math.max(max, dfs(matrix, row, col + 1, tmp, depth + 1, dp));
+                
         matrix[row][col] = tmp;
         
-        dp[row][col] = Math.max(deepestUpDown, deepestLeftRight) + 1;
+        dp[row][col] = max + 1;
         
         return dp[row][col];
     }
