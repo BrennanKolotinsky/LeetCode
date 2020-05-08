@@ -1,0 +1,55 @@
+class Solution {
+    public int longestIncreasingPath(int[][] matrix) {
+        if (matrix.length == 0 || matrix[0].length == 0)
+            return 0;
+        
+        int[][] dp = new int[matrix.length][matrix[0].length];
+        
+        int max = 0;
+        int prev = Integer.MIN_VALUE;
+        
+        for (int i = 0; i < matrix.length; i++)
+            for (int j = 0; j < matrix[i].length; j++)
+                max = Math.max(max, dfs(matrix, i, j, prev, 0, dp));
+        
+        return max;
+    }
+    
+    public int dfs(int[][] matrix, int row, int col, int prev, int depth, int[][] dp) {
+        
+        if (prev >= matrix[row][col])
+            return 0;
+        
+        if (dp[row][col] != 0)
+            return dp[row][col];
+        
+        int tmp = matrix[row][col];
+        matrix[row][col] = Integer.MIN_VALUE;
+        
+        int up = 0;
+        if (row > 0)
+            up = dfs(matrix, row - 1, col, tmp, depth + 1, dp);
+        
+        int down = 0;
+        if (row < matrix.length - 1)
+            down = dfs(matrix, row + 1, col, tmp, depth + 1, dp);
+            
+        int deepestUpDown = Math.max(up, down);
+        
+        int left = 0;
+        if (col > 0)
+            left = dfs(matrix, row, col - 1, tmp, depth + 1, dp);
+        
+        int right = 0;
+        if (col < matrix[0].length - 1)
+            right = dfs(matrix, row, col + 1, tmp, depth + 1, dp);
+        
+        int deepestLeftRight = Math.max(left, right);
+        
+        matrix[row][col] = tmp;
+        
+        dp[row][col] = Math.max(deepestUpDown, deepestLeftRight) + 1;
+        
+        return dp[row][col];
+    }
+}
