@@ -8,37 +8,59 @@
  */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-        // easy approach!
         ListNode dummyHead = new ListNode(0), dummy = dummyHead;
         
-        int listsLeft = lists.length - 1;
+        // PRIORITY QUEUE
+        PriorityQueue<ListNode> q = new PriorityQueue<>((a,b) -> a.val - b.val);
         
-        // empty lists are already incomplete!
-        for (ListNode a : lists)
-            if (a == null)
-                listsLeft--;
+        for (ListNode a : lists) {
+            if (a != null)
+                q.offer(a);
+        }
         
-        while (listsLeft >= 0) {
-            
-            ListNode curr = null;
-            int saved = 0;
-            
-            for (int i = 0; i < lists.length; i++) {
-                if (lists[i] != null && (curr == null || curr.val > lists[i].val)) {
-                    curr = lists[i];
-                    saved = i;
-                }
-            }
-            
+        while (!q.isEmpty()) {
+            ListNode curr = q.poll();
             dummy.next = curr;
-            lists[saved] = lists[saved].next;
-            
-            if (lists[saved] == null)
-                listsLeft--;
-            
             dummy = dummy.next;
+            
+            if (curr.next != null)
+                q.offer(curr.next);
         }
         
         return dummyHead.next;
+        
+        
+        // easy approach!
+//         ListNode dummyHead = new ListNode(0), dummy = dummyHead;
+        
+//         int listsLeft = lists.length - 1;
+        
+//         // empty lists are already incomplete!
+//         for (ListNode a : lists)
+//             if (a == null)
+//                 listsLeft--;
+        
+//         while (listsLeft >= 0) {
+            
+//             ListNode curr = null;
+//             int saved = 0;
+            
+//             for (int i = 0; i < lists.length; i++) {
+//                 if (lists[i] != null && (curr == null || curr.val > lists[i].val)) {
+//                     curr = lists[i];
+//                     saved = i;
+//                 }
+//             }
+            
+//             dummy.next = curr;
+//             lists[saved] = lists[saved].next;
+            
+//             if (lists[saved] == null)
+//                 listsLeft--;
+            
+//             dummy = dummy.next;
+//         }
+        
+//         return dummyHead.next;
     }
 }
