@@ -1,0 +1,31 @@
+class Solution {
+    public String getPermutation(int n, int k) {
+        if (n < 1)
+            return "";
+        
+        StringBuilder sb = new StringBuilder("");
+        
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        
+        // factorial
+        int[] fact = new int[n + 1];
+        fact[0] = 1;
+        for (int i = 1; i <= n; i++) 
+            fact[i] = i * fact[i-1];
+        
+        for (int i = 1; i <= n; i++)
+            list.add(i);
+        
+        k--;
+        
+        for (int i = n; i > 0; i--) {
+            int ind = k / fact[i - 1]; // grab the index by dividing by one less
+            int num = list.get(ind);
+            list.remove(ind);
+            sb.append(String.valueOf(num));
+            k = k % fact[i - 1]; // find remainder and base off of it
+        }
+                
+        return sb.toString();
+    }
+}
