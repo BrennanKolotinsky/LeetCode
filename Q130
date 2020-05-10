@@ -1,0 +1,64 @@
+class Solution {
+    
+    public int[][] mv = new int[][]{{1,0}, {-1,0}, {0, 1}, {0, -1}};
+    
+    public void solve(char[][] board) {
+        
+        Queue<int[]> q = new LinkedList<>();
+        List<int[]> list = new ArrayList<>();
+        
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 'X' || board[i][j] == 'A')
+                    continue;
+                                
+                q.offer(new int[]{i, j});
+                boolean outOfBounds = false;
+                
+                while (!q.isEmpty()) {
+                    
+                    int len = q.size();
+                    
+                    for (int z = 0; z < len; z++) {
+                        
+                        int[] curr = q.poll();
+                        
+                        // temp mark visited
+                        if (board[curr[0]][curr[1]] == 'C')
+                            continue;
+                        
+                        board[curr[0]][curr[1]] = 'C';
+                        list.add(new int[]{curr[0], curr[1]});
+                    
+                        for (int[] direct : mv)
+                            if(check(curr[0] + direct[0], curr[1] + direct[1], q, board, list))
+                                outOfBounds = true;
+                    }
+                }
+                
+                // if we don't hit an edge, let's set all coordinates to 'X', else let's temporarily set all of the coordinates to A and then swap them back -- this avoids rechecking then
+                for (int[] coordinate : list)
+                    board[coordinate[0]][coordinate[1]] = outOfBounds ? 'A' : 'X';
+                
+                list = new ArrayList<>(); // reset
+            }
+        }
+        
+        // change the Os back that couldn't be changed to Xs
+        for (int i = 0; i < board.length; i++)
+            for (int j = 0; j < board[i].length; j++)
+                if (board[i][j] == 'A')
+                    board[i][j] = 'O';
+    }
+    
+    // true if we pass an edge!
+    public boolean check(int row, int col, Queue<int[]> q, char[][] board, List<int[]> list) {
+        if (row < 0 || row >= board.length || col < 0 || col >= board[row].length)
+            return true;
+        
+        if (board[row][col] == 'O')
+            q.offer(new int[]{row, col});
+            
+        return false;
+    }
+}
