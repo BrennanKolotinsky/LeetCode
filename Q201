@@ -1,0 +1,14 @@
+class Solution {
+    public int rangeBitwiseAnd(int m, int n) {
+        int i = 0;
+        
+        // Essentially find the prefix. Any that flipped before the common prefix, means all others prior also flipped!
+        while(m != n){
+            m >>= 1;
+            n >>= 1;
+            i++;  
+        }  
+        
+        return m << i; // push M back to where it was
+    }
+}
