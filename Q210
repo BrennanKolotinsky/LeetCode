@@ -1,0 +1,69 @@
+class Point {
+    
+    List<Integer> connect;
+    int prereqs;
+    
+    public Point() {
+        connect = new ArrayList<>();
+        prereqs = 0;
+    }
+    
+    public void addPre(int i) {
+        connect.add(i);
+        prereqs++;
+    }
+}
+
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        
+        int[] sol = new int[numCourses];
+        
+        Point[] graph = createGraph(numCourses, prerequisites);
+        int totalTaken = 0;
+        Queue<Integer> q = new LinkedList<>();
+        
+        for (int i = 0; i < numCourses; i++) {      
+            if (graph[i].prereqs == 0) {     
+                sol[totalTaken++] = i;
+                q.offer(i);
+            }
+        }
+    
+        while (!q.isEmpty()) {
+            int len = q.size();
+
+            for (int j = 0; j < len; j++) {
+
+                int curr = q.poll();
+                
+                for (int toTake = 0; toTake < numCourses; toTake++) {
+                    if (graph[toTake].connect.contains(curr)) {
+                        graph[toTake].prereqs--;
+
+                        if(graph[toTake].prereqs == 0) {
+                            sol[totalTaken++] = toTake;
+                            q.offer(toTake);
+                        } 
+                    }     
+                }
+            }
+        }
+        
+        return totalTaken == numCourses ? sol : new int[0];
+    }
+    
+    public Point[] createGraph(int numCourses, int[][] prerequisites) {
+        
+        Point[] graph = new Point[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            graph[i] = new Point();
+        }
+        
+        for (int[] pre : prerequisites) {
+            graph[pre[0]].addPre(pre[1]);
+        }
+        
+        return graph;
+    }
+}
