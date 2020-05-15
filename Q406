@@ -8,7 +8,7 @@ class Solution {
         List<int[]> res = new ArrayList<>();
         
         // let's now add them in the sorted order, at the specific index
-        // add the tallest first, then put the next level in with the appropriate amount of people on and so on
+        // add the tallest first, then put the next level in with the appropriate amount of people on and so on -- arraylist let's us put the person in at the proper index
         for (int[] p : people) {
             res.add(p[1], p);
         }
