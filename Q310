@@ -1,0 +1,79 @@
+class Point {
+    
+    List<Integer> connectedPoints;
+    int pos;
+    int totalConn;
+    
+    public Point(int i, int n) {
+        connectedPoints = new ArrayList<>();
+        pos = i;
+        totalConn = 0;
+    }
+    
+    public void connect(Point p, int i) {
+        connectedPoints.add(i);
+        totalConn++;
+    }
+    
+    public void remove(int i) {
+        connectedPoints.remove(i);
+        totalConn--;
+    }
+}
+
+class Solution {
+    Point[] graph;
+    
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        
+        if (n == 1)
+            return Arrays.asList(0);
+        
+        makeGraph(n, edges);
+        
+        List<Integer> leaves = new ArrayList<>();
+        
+        for (int i = 0; i < n; i++)
+            if (graph[i].totalConn == 1)
+                leaves.add(i);
+        
+        if (n == leaves.size())
+            return leaves;
+        
+        while (n > 2) {
+            List<Integer> newLeaves = new ArrayList<>();
+            
+            for (int leave : leaves) {
+                for (int nb : graph[leave].connectedPoints) {
+                    graph[nb].totalConn--;
+                    if (graph[nb].totalConn == 1) {
+                        newLeaves.add(nb);
+                    }
+                }
+            }
+            
+            n -= leaves.size();
+            leaves = newLeaves;
+        }
+        
+        return leaves;
+    }
+    
+    public Point[] makeGraph(int n, int edges[][]) {
+        graph = new Point[n];
+        
+        for (int i = 0; i < n; i++) {
+            graph[i] = new Point(i, n);
+        }
+        
+        for (int[] edge : edges) {
+            Point p1 = graph[edge[0]];
+            Point p2 = graph[edge[1]];
+            
+            p1.connect(p2, edge[1]);
+            p2.connect(p1, edge[0]);
+        }
+        
+        return graph;
+    }
+}
