@@ -1,0 +1,35 @@
+class MedianFinder {
+    
+    PriorityQueue<Integer> min;
+    PriorityQueue<Integer> max;
+
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        min = new PriorityQueue<>((a,b)->b-a); // the min will store our extra value, also put the largest min at the top of the pile
+        max = new PriorityQueue<>((a,b)->a-b);
+    }
+    
+    public void addNum(int num) {
+        // let's add the smallest element from our big heap, into our small heap
+        if (min.size() == max.size()) {
+            max.offer(num); // add the new val into our max, to sort quickly
+            min.offer(max.poll());
+        // let's add our biggest number from our smaller heap to even the sizes
+        } else {
+            min.offer(num);
+            max.offer(min.poll());
+        }        
+    }
+    
+    public double findMedian() {
+        // divide by 2.0 to give a long value back -- if it's even sized let's average else let's grab the extra value from the min heap
+        return min.size() == max.size() ? (min.peek() + max.peek()) / 2.0 : min.peek();
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
