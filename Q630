@@ -1,0 +1,21 @@
+class Solution {
+    public int scheduleCourse(int[][] courses) {
+        // confusing solution taken from an answer -- similar to Project Management university course
+        Arrays.sort(courses, (a,b)->a[1] - b[1]); // shortest deadline first
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->b-a);
+        int time = 0;
+        
+        for (int[] c : courses) {
+            
+            pq.offer(c[0]);
+            time += c[0];
+            
+            // if we have maxed our time, let's remove the biggest course from our schedule -- this is the optimal approach due to the sorting!
+            if (time > c[1])
+                time -= pq.poll();
+        }
+        
+        return pq.size();
+    }
+}
