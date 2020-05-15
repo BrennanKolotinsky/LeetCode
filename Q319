@@ -1,0 +1,23 @@
+class Solution {
+    public int bulbSwitch(int n) {
+        
+        // divisors only come in pairs, when they are a number squared -- every other time they come in pairs!
+        // then just count up all the square roots up to that number
+        return (int) Math.sqrt(n);
+        
+        // brute force
+//         int total = 0;
+//         for (int i = 1; i < n + 1; i++) {
+            
+//             boolean on = false;
+//             for (int j = 1; j < n + 1; j++) {
+//                 if (i % j == 0)
+//                     on = !on;
+//             }
+            
+//             total += on ? 1 : 0;
+//         }
+        
+//         return total;
+    }
+}
