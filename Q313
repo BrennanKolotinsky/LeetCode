@@ -1,0 +1,29 @@
+class Solution {
+    public int nthSuperUglyNumber(int n, int[] primes) {
+        
+        if (primes.length == 0 || n == 0)
+            return 0;
+        
+        int[] uglies = new int[n];
+        int[] counters = new int[primes.length];
+        
+        uglies[0] = 1;
+        
+        for (int i = 1; i < n; i++) {
+            int nextMin = Integer.MAX_VALUE;
+            
+            // loop through the primes and find the next smallest one
+            for (int j = 0; j < primes.length; j++)
+                nextMin = Math.min(nextMin, uglies[counters[j]] * primes[j]);
+            
+            uglies[i] = nextMin;
+            
+            // advance all matching counters to avoid duplicates
+            for (int j = 0; j < primes.length; j++)
+                if (uglies[counters[j]] * primes[j] == nextMin)
+                    counters[j]++;
+        }
+        
+        return uglies[n - 1];
+    }
+}
