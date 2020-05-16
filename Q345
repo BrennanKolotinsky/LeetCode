@@ -1,0 +1,41 @@
+class Solution {
+    public String reverseVowels(String s) {
+        
+        char[] ltrs = s.toCharArray();
+        
+        // two pointers
+        int left = 0, right = s.length() - 1;
+        while (left < right) {
+            
+            boolean leftV = isVowel(s.charAt(left)), rightV = isVowel(s.charAt(right));
+            
+            if (leftV && rightV)
+                swap(ltrs, left, right);
+            else if (leftV)
+                left--;
+            else if (rightV)
+                right++;
+            
+            left++;
+            right--;
+        }
+        
+        return new String(ltrs);
+    }
+    
+    public void swap(char[] ltrs, int left, int right) {
+        char tmp = ltrs[left];
+        ltrs[left] = ltrs[right];
+        ltrs[right] = tmp;
+    } 
+    
+    public boolean isVowel(char c) {
+        char[] vowels = new char[]{'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
+        
+        for (char vow : vowels)
+            if (c == vow)
+                return true;
+        
+        return false;
+    }
+}
