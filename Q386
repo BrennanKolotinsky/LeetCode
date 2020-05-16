@@ -7,16 +7,16 @@ class Solution {
     
     public void dfs(List<Integer> sol, int n, int curr) {
         // add numbers that aren't zero
-        if (curr <= n && curr != 0)
+        if (curr != 0)
             sol.add(curr);
-        // break if we pass the num
-        else if (curr > n)
-            return;
         
         for (int i = 0; i < 10; i++) {
             // skip endlessly adding zeros
             if (curr == 0 && i == 0)
                 continue;
+            
+            if (curr * 10 + i > n)
+                break;
             
             dfs(sol, n, curr * 10 + i);
         }        
