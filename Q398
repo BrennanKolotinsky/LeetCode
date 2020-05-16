@@ -1,0 +1,29 @@
+class Solution {
+    
+    HashMap<Integer, List<Integer>> map;
+    Random rand;
+
+    public Solution(int[] nums) {
+        map = new HashMap<>();
+        rand = new Random();
+        
+        for (int i = 0; i < nums.length; i++) {
+            List<Integer> lst = map.getOrDefault(nums[i], new ArrayList<>());
+            lst.add(i);
+            map.put(nums[i], lst);
+            lst = null;
+        }
+    }
+    
+    public int pick(int target) {
+        List<Integer> tmp = map.get(target);
+        int int_rand = rand.nextInt(tmp.size());
+        return tmp.get(int_rand);
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int param_1 = obj.pick(target);
+ */
