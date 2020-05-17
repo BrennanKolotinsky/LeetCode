@@ -1,0 +1,36 @@
+class Solution {
+    public double findMedianSortedArrays(int[] A, int[] B) {
+	    if (A.length > B.length)
+            return findMedianSortedArrays(B, A);
+        
+        int x = A.length, y = B.length;
+        
+        int lo = 0, hi = x;
+        
+        while (lo <= hi) {
+            int partitionX = (lo + hi) / 2;
+            int partitionY = (x + y + 1) / 2 - partitionX;
+            
+            int leftX = partitionX == 0 ? Integer.MIN_VALUE : A[partitionX - 1];
+            int rightX = partitionX == x ? Integer.MAX_VALUE : A[partitionX];
+            
+            int leftY = partitionY == 0 ? Integer.MIN_VALUE : B[partitionY - 1];
+            int rightY = partitionY == y ? Integer.MAX_VALUE : B[partitionY];
+            
+            if (leftX <= rightY && leftY <= rightX) {
+                
+                if  ((x + y) % 2 == 0) {
+                    return (double)(Math.max(leftX, leftY) + Math.min(rightX, rightY)) / 2;
+                } else {
+                    return (double) Math.max(leftX, leftY);
+                }
+            } else if (leftX > rightY) {
+                hi = partitionX - 1;
+            } else {
+                lo = partitionX + 1;
+            }
+        }
+        
+        return -1;
+	}
+}
