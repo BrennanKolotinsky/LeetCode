@@ -1,0 +1,35 @@
+class Solution {
+    public List<String> restoreIpAddresses(String s) {
+        List<String> sol = new ArrayList<String>();
+        
+        if (s.length() > 12)
+            return sol;
+        
+        dfs(s, 0, 0, "", sol);
+        return sol;
+    }
+    
+    public void dfs(String s, int inserted, int pos, String curr, List<String> sol) {
+        
+        if (inserted == 4 && pos == s.length())
+            sol.add(curr);
+        
+        // 3 way to make each string
+        for (int i = 0; i < 3; i++) {
+            if (pos + i >= s.length())
+                break;
+            
+            String num = s.substring(pos, pos + i + 1);
+            if (num.charAt(0) == '0' && num.length() != 1)
+                continue;
+            
+            if (Integer.parseInt(num) <= 255) {
+                if (inserted == 0) {
+                    dfs(s, 1, i + 1, num, sol);
+                } else
+                    dfs(s, inserted + 1, pos + i + 1, curr + "." + num, sol);
+            }
+                
+        }
+    }
+}
