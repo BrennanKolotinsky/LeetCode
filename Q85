@@ -1,0 +1,35 @@
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        
+        if (matrix.length == 0 || matrix[0].length == 0)
+            return 0;
+        
+        // refer to question 84
+        int max = 0;
+        int h[] = new int[matrix[0].length + 1]; // one extra because we loop one extra time (the last values are set to zero)
+        
+        for (int i = 0; i < matrix.length; i++) {
+            
+            Stack<Integer> st = new Stack<>();
+            for (int j = 0; j <= matrix[i].length; j++) {
+                // find the current height
+                if (j == matrix[i].length || matrix[i][j] == '0')
+                    h[j] = 0;
+                else if (matrix[i][j] == '1')
+                    h[j] += 1;
+            
+                // every min point we find let's run the check at -- note you don't need to worry about previous heights being more than zero, if this ones height is 0, because the stack will never pop it back that far (the current value will be more than zero and the peek will be zero)
+                while (!st.isEmpty() && h[j] <= h[st.peek()]) {
+                    int top = st.pop(); 
+                    int height = h[top];
+                    int len = st.isEmpty() ? j : j - st.peek() - 1;
+                    max = Math.max(len * height, max);
+                }
+                
+                st.push(j);
+            }
+        }
+        
+        return max;
+    }
+}
