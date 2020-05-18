@@ -1,27 +1,92 @@
+// class Solution {
+//     public int longestConsecutive(int[] nums) {
+        
+//         HashSet<Integer> set = new HashSet<>();
+//         for (int n : nums) {
+//             set.add(n);
+//         }
+        
+        
+//         int longest = 0;
+        
+//         for (int n : nums) {
+//             int curr = 1;
+//             // don't bother checking if there is a lower value
+//             if (!set.contains(n - 1)) {
+//                 while (set.contains(n + 1)) {
+//                     curr++;
+//                     n = n + 1;
+//                 }
+//             }
+            
+//             longest = Math.max(curr, longest);
+//         }
+        
+//         return longest;
+//     }
+// }
+
 class Solution {
     public int longestConsecutive(int[] nums) {
         
-        HashSet<Integer> set = new HashSet<>();
-        for (int n : nums) {
-            set.add(n);
+        if (nums.length == 0)
+            return 0;
+        
+        UnionFind UF = new UnionFind(nums.length);
+        
+        // same idea as optimal solution
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            // don't add duplicates!
+            if (!map.containsKey(nums[i]))
+                map.put(nums[i], i); // keep the associated index
         }
         
+        HashSet<Integer> visited = new HashSet<>();
         
-        int longest = 0;
-        
-        for (int n : nums) {
-            int curr = 1;
-            // don't bother checking if there is a lower value
-            if (!set.contains(n - 1)) {
-                while (set.contains(n + 1)) {
-                    curr++;
-                    n = n + 1;
-                }
-            }
+        for (int i = 0; i < nums.length; i++) {
+            int curr = nums[i];
+            if (map.containsKey(curr + 1) && !visited.contains(curr)) {
+                UF.union(i, map.get(curr + 1)); // pass the indexes
+                visited.add(curr); // don't revisit the same index 
+            }   
+        }
             
-            longest = Math.max(curr, longest);
+        return UF.largestConn;
+    }
+}
+
+class UnionFind {
+    
+    int[] conn;
+    int largestConn;
+    
+    public UnionFind(int n) {   
+        this.conn = new int[n];
+        this.largestConn = 1;  // default there will be one connection for any one number
+        Arrays.fill(this.conn, -1);
+    }
+    
+    public int find(int n) {
+        // find the parent which is a negative element
+        while (this.conn[n] >= 0) {
+            n = this.conn[n];
         }
         
-        return longest;
+        return n;
+    }
+    
+    public void union(int n1, int n2) {
+        int parent1 = this.find(n1); // find the index of the parent
+        int parent2 = this.find(n2);
+        
+        if (parent1 == parent2)
+            return;
+        
+        // parent 2 is automatically larger!
+        this.conn[parent2] += conn[parent1];
+        this.conn[parent1] = parent2;
+        this.conn[n1] = parent2; // increases efficiency slightly by reducing find time for future elements
+        this.largestConn = Math.max(Math.abs(conn[parent2]), this.largestConn);
     }
 }
