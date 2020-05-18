@@ -45,6 +45,7 @@ class UnionFind {
         for (int i = 0; i < initialInf.length; i++) {
             int parent = find(initialInf[i]);
             
+            // if the connection only has one infected let's find the if there are more connections in this path than the previous answer, if it has more than one infected our first pick still has a lower index and is better
             if (inf[parent] == 1) {
                 if (Math.abs(conn[parent]) > saved) {
                     saved = Math.abs(conn[parent]);
