@@ -1,0 +1,87 @@
+class UnionFind {
+    
+    int[] conn;
+    int[] inf; // the parent
+    
+    public UnionFind(int n) {
+        this.conn = new int[n];
+        Arrays.fill(this.conn, -1);
+        this.inf = new int[n];
+    }
+    
+    public int find(int n) {
+        while (conn[n] >= 0) {
+            n = find(conn[n]);
+        }
+        
+        return n;
+    }
+    
+    public void union(int p1, int p2) {
+        int parent1 = find(p1);
+        int parent2 = find(p2);
+        
+        if (parent1 == parent2)
+            return;
+        
+        if (Math.abs(parent1) >= Math.abs(parent2)) {
+            conn[parent1] += conn[parent2];
+            conn[parent2] = parent1;
+        } else {
+            conn[parent2] += conn[parent1];
+            conn[parent1] = parent2;
+        }
+    }
+    
+    public void infect(int p) {
+        int parent = find(p);
+        inf[parent]++;
+    }
+    
+    public int findMostInf(int [] initialInf) {
+        int saved = 0;
+        int bestConn = initialInf[0];
+        
+        for (int i = 0; i < initialInf.length; i++) {
+            int parent = find(initialInf[i]);
+            
+            if (inf[parent] == 1) {
+                if (Math.abs(conn[parent]) > saved) {
+                    saved = Math.abs(conn[parent]);
+                    bestConn = initialInf[i];
+                }
+            }    
+        }
+        
+        return bestConn;
+    }
+}
+
+class Solution {
+    public int minMalwareSpread(int[][] graph, int[] initial) {
+        
+        if (graph.length == 0 || initial.length == 0)
+            return -1;
+        
+        Arrays.sort(initial);
+        
+        UnionFind uf = new UnionFind(graph[0].length);
+        
+        for (int i = 0; i < graph.length; i++) {
+            for (int j = i + 1; j < graph[i].length; j++) {
+                if (graph[i][j] == 1) {
+                    uf.union(i, j);
+                }
+            }
+        }
+        
+        // insert the infected onto the parent elements
+        for (int n : initial) {
+            uf.infect(n);
+        }
+        
+        int mostInf = uf.findMostInf(initial);
+        
+        return mostInf;
+    }
+}
