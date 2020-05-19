@@ -1,0 +1,33 @@
+class Solution {
+    public int maxCoins(int[] nums) {
+        // note, very similar to the longest path hard question!
+        // The only difference is we are using a D&C algorithm -- break down repeatedly and find the max at each step
+        int[][] dp = new int[nums.length][nums.length];
+        return dfs(nums, dp, 0, nums.length - 1);
+    }
+    
+    public int dfs(int[] nums, int[][] dp, int start, int end) {
+        
+        if (start > end)
+            return 0;
+        
+        // we already calculated the max
+        if (dp[start][end] != 0)
+            return dp[start][end];
+        
+        int max = nums[start];
+        
+        // we can burst any balloon and the way up until the end!
+        for (int i = start; i <= end; i++) {
+            max = Math.max(max, dfs(nums, dp, start, i - 1) + get(nums, start - 1) * get(nums, i) * get(nums, end + 1) + dfs(nums, dp, i + 1, end));
+        }
+        
+        dp[start][end] = max;
+        
+        return max;
+    }
+    
+    public int get(int[] nums, int pos) {
+        return pos == -1 || pos == nums.length ? 1 : nums[pos];
+    }
+}
