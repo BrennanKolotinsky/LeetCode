@@ -14,18 +14,22 @@
  * }
  */
 class Solution {
-    public int rob(TreeNode root) {
-        return Math.max(search(root, true), search(root, false));
-    }
     
-    public int search(TreeNode root, boolean prevVisited) {
-        
-        if (root == null)
-            return 0;
-        
-        if (prevVisited == false)
-            return Math.max(root.val + search(root.left, true) + search(root.right, true), search(root.left, false) + search(root.right, false));
-        else
-            return search(root.left, false) + search(root.right, false); // can't visit and can't add the current one, but can the next one
+   public int rob(TreeNode root) {
+        int[] res = robSub(root);
+        return Math.max(res[0], res[1]);
+    }
+
+    private int[] robSub(TreeNode root) {
+        if (root == null) return new int[2];
+
+        int[] left = robSub(root.left);
+        int[] right = robSub(root.right);
+        int[] res = new int[2];
+
+        res[0] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]); // we have the option if we want the next robbed or not robbed
+        res[1] = root.val + left[0] + right[0]; // next two can't be robbed
+
+        return res;
     }
 }
