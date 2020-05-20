@@ -1,0 +1,18 @@
+class Solution {
+    public int compareVersion(String version1, String version2) {
+        String[] a = version1.split("\\.");
+        String[] b = version2.split("\\.");
+        
+        for (int i = 0; i < Math.max(a.length, b.length); i++) {
+            
+            Integer n1 = i >= a.length ? 0 : Integer.parseInt(a[i]);
+            Integer n2 = i >= b.length ? 0 : Integer.parseInt(b[i]);
+
+            int compare = n1.compareTo(n2);
+            if (compare != 0)
+                return compare;
+        }
+        
+        return 0;
+    }
+}
