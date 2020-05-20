@@ -2,30 +2,29 @@ class Solution {
     
     private int rows, cols, total;
     private Random rand;
-    private Set<Integer> available; // this contains a set of coordinates that we could set to one
+    private HashMap<Integer, Integer> map;
 
     public Solution(int n_rows, int n_cols) {
         this.rows = n_rows;
         this.cols = n_cols;
         this.rand = new Random();
-        this.available = new HashSet<>();
+        this.map = new HashMap<>();
         this.total = this.rows * this.cols;
     }
     
     public int[] flip() {
-        int x = rand.nextInt(this.total);
         
-        // keep grabbing random numbers until we find one that isn't in there
-        while (available.contains(x)) {
-            x = rand.nextInt(this.total);
-        }
+        // FISHER YATE'S ALGORITHM: https://www.youtube.com/watch?v=tLxBwSL3lPQ
+        int r = rand.nextInt(this.total--);
+        int x = this.map.getOrDefault(r, r); // get the current element at this position, or grab the current element
         
-        this.available.add(x);
+        this.map.put(r, this.map.getOrDefault(total, total));
         return new int[]{x / this.cols, x % this.cols};
     }
     
     public void reset() {
-        this.available.clear();
+        this.map.clear();
+        this.total = this.cols * this.rows;
     }
 }
 
