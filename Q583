@@ -1,0 +1,32 @@
+class Solution {
+    public int minDistance(String word1, String word2) {        
+        int[][] dp = new int[word1.length()][word2.length()];
+        return dfs(word1, word2, 0, 0, dp);
+    }
+    
+    private int dfs(String s1, String s2, int pos1, int pos2, int[][] dp) {
+        // all characters used up, let's insert the remaining
+        if (s1.length() == pos1)
+            return s2.length() - pos2;
+        
+        if (s2.length() == pos2)
+            return s1.length() - pos1;
+        
+        // already calculated the quickest solution here
+        if (dp[pos1][pos2] != 0)
+            return dp[pos1][pos2];
+        
+        int quickest;
+        if (s1.charAt(pos1) == s2.charAt(pos2))
+            quickest = dfs(s1, s2, pos1 + 1, pos2 + 1, dp);
+        else {
+            int del1 = dfs(s1, s2, pos1, pos2 + 1, dp);
+            int del2 = dfs(s1, s2, pos1 + 1, pos2, dp);
+            
+            quickest = Math.min(del1, del2) + 1;
+        }
+        
+        dp[pos1][pos2] = quickest;
+        return dp[pos1][pos2];
+    }
+}
