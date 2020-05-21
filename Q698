@@ -1,0 +1,40 @@
+class Solution {
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        int sum = 0;
+        for (int n : nums) {
+            sum += n;
+        }
+        
+        // not evenly divisible
+        if (k <= 0 || sum % k != 0)
+            return false;
+        
+        int[] visited = new int[nums.length];
+        return dfs(nums, k, sum / k, 0, 0, visited, nums.length);
+    }
+    
+    // k here represents the sums remaining
+    public boolean dfs(int[] nums, int k, int goal, int curr, int start, int[] visited, int available) {
+        
+        // all of the remaining numbers must total to this amount logically!
+        if (k == 1)
+            return true;
+        
+        if (curr > goal)
+            return false;
+        
+        if (curr == goal && available > 0)
+            return dfs(nums, k - 1, goal, 0, 0, visited, available);
+        
+        for (int i = start; i < nums.length; i++) {
+            if (visited[i] == 0) {
+                visited[i] = 1;
+                if (dfs(nums, k, goal, curr + nums[i], i + 1, visited, available - 1))
+                    return true;
+                visited[i] = 0;
+            }   
+        }
+        
+        return false;
+    }
+}
