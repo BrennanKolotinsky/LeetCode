@@ -1,0 +1,27 @@
+class Solution {
+    int[][] memo;
+    
+    public int strangePrinter(String s) {        
+        memo = new int[s.length()][s.length()];
+        return dp(s, 0, s.length() - 1);
+        
+    }
+    
+    public int dp(String s, int i, int j) {
+        
+        if (i > j) return 0;
+        
+        if (memo[i][j] != 0)
+            return memo[i][j];
+        
+        int ans = dp(s, i+1, j) + 1; // change letter
+
+        for (int k = i+1; k <= j; k++)
+            if (s.charAt(k) == s.charAt(i))
+                ans = Math.min(ans, dp(s, i, k-1) + dp(s, k+1, j));
+
+        memo[i][j] = ans;
+        
+        return memo[i][j];
+    }
+}
