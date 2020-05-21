@@ -1,0 +1,46 @@
+class Solution {
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        int[][] buildingPoint = new int[buildings.length * 2][2];
+        int cnt = 0;
+        for (int[] building : buildings) {
+            buildingPoint[cnt++] = new int[]{building[0], -building[2]}; // height on starts are negative
+            buildingPoint[cnt++] = new int[]{building[1], building[2]};
+        }
+        
+        Arrays.sort(buildingPoint, (a, b) -> {
+            // smaller x's first
+            if (a[0] != b[0])
+                return a[0] - b[0];
+            // three cases!
+            // both end points, return the smaller first -- so we remove it first (and thus we won't add a point until we remove are next element in the priority queue)
+            // both are starts -- we will want to add the bigger start first (so that the smaller start doesn't become a point on the map) -- the bigger start is more negative
+            // one is a start and one is an end, we want the start first
+            return a[1] - b[1];
+        });
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a); // sort them by height so we can find the tallest building
+        int prevMax = 0;
+        pq.offer(0); // as a comparison!
+        List<List<Integer>> sol = new ArrayList<>();
+        
+        for (int[] build : buildingPoint) {
+            // start point
+            if (build[1] < 0) {
+                pq.offer(-build[1]);
+            } else {
+                pq.remove(build[1]);
+            }
+            
+            // everytime we have a new highest point, let's add this point to our graph
+            if (pq.peek() != prevMax) {
+                List<Integer> tmp = new ArrayList<>();
+                tmp.add(build[0]); // the new height
+                tmp.add(pq.peek());
+                sol.add(tmp);
+                prevMax = pq.peek();
+            }
+        }
+        
+        return sol;
+    }
+}
