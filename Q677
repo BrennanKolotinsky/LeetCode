@@ -1,0 +1,61 @@
+class TrieNode {
+    
+    public boolean isWord;
+    public TrieNode[] children;
+    public int val;
+    
+    public TrieNode() {
+        isWord = false;
+        children = new TrieNode[26];
+    }
+}
+
+
+class MapSum {
+    
+    public TrieNode root;
+    public HashMap<String, Integer> map;
+
+    /** Initialize your data structure here. */
+    public MapSum() {
+        root = new TrieNode();
+        map = new HashMap<>();
+    }
+    
+    public void insert(String key, int val) {
+        int oldVal = map.getOrDefault(key, 0);
+        map.put(key, val);
+        int newVal = val - oldVal;
+        
+        TrieNode ws = root;
+        ws.val += newVal;
+        for (char c : key.toCharArray()) {
+            int n = c - 'a';
+            if (ws.children[n] == null) {
+                ws.children[n] = new TrieNode();
+            }
+            ws = ws.children[n];
+            ws.val += newVal;
+        }
+    }
+    
+    public int sum(String prefix) {
+        TrieNode ws = root;
+        for (char c : prefix.toCharArray()) {
+            int n = c - 'a';
+            if (ws.children[n] == null) {
+                return 0;
+            }
+            ws = ws.children[n];
+        }
+        
+        return ws.val;
+    }
+}
+
+/**
+ * Your MapSum object will be instantiated and called as such:
+ * MapSum obj = new MapSum();
+ * obj.insert(key,val);
+ * int param_2 = obj.sum(prefix);
+ */
