@@ -1,0 +1,60 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    
+    List<List<Integer>> res;
+    
+    public Solution() {
+        this.res = new ArrayList<>();
+    }
+    
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        if (root == null)
+            return this.res;
+        
+        dfs(root, sum, 0, new ArrayList<Integer>());
+        // pathSum(root.left, sum);
+        // pathSum(root.right, sum);
+        
+        return this.res;
+    }
+    
+    public void dfs(TreeNode root, int sum, int curr, List<Integer> tmp) {
+        
+        if (root == null)
+            return;
+        
+        tmp.add(root.val);
+        curr += root.val;
+        
+        if (curr == sum && root.left == null && root.right == null) {
+            List<Integer> cloned = clone(tmp);
+            this.res.add(cloned);
+        }
+        
+        dfs(root.left, sum, curr, tmp);
+        dfs(root.right, sum, curr, tmp);
+        tmp.remove(tmp.size() - 1);
+    }
+    
+    public List<Integer> clone(List<Integer> tmp) {
+        List<Integer> cloned = new ArrayList<>();
+        for (int n : tmp) {
+            cloned.add(n);
+        }
+        return cloned;
+    }
+}
