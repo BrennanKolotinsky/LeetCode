@@ -1,0 +1,43 @@
+class Solution {
+    public List<String> summaryRanges(int[] nums) {
+        
+        List<String> sol = new ArrayList<>();
+        
+        if (nums.length == 0)
+            return sol;
+        
+        Arrays.sort(nums); // put them in order!
+        
+        int firstInd = 0, secondInd = -1;
+        String curr; // just a string to build
+        
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] - 1 != nums[i - 1]) {
+                
+                
+                // we have a range or an individual value
+                if (secondInd > firstInd) {
+                    curr = String.valueOf(nums[firstInd]) + "->" + String.valueOf(nums[secondInd]);
+                } else {
+                    curr = String.valueOf(nums[firstInd]);
+                }
+                
+                sol.add(curr);
+                firstInd = i; // advance the first index of the next range to this value
+            } else {
+                secondInd = i; // advance the range to a further range    
+            }
+        }
+        
+        // add the last value!
+        if (secondInd > firstInd) {
+            curr = String.valueOf(nums[firstInd]) + "->" + String.valueOf(nums[secondInd]);
+        } else {
+            curr = String.valueOf(nums[firstInd]);
+        }
+
+        sol.add(curr);
+        
+        return sol;
+    }
+}
