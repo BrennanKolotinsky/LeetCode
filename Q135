@@ -1,0 +1,27 @@
+class Solution {
+    public int candy(int[] ratings) {
+        
+        if (ratings.length == 0)
+            return 0;
+        
+        int[] cand = new int[ratings.length];
+        
+        Arrays.fill(cand, 1); // put one candy in every spot
+        
+        // add one candy to each one on the left side if it is bigger
+        for (int i = 1; i < ratings.length; i++)
+            if (ratings[i - 1] < ratings[i])
+                cand[i] = cand[i - 1] + 1;
+        
+        // add one based on the right, unless we already have more candies!
+        for (int i = ratings.length - 2; i > -1; i--)
+            if (ratings[i + 1] < ratings[i])
+                cand[i] = Math.max(cand[i + 1] + 1, cand[i]);
+        
+        int total = 0;
+        for (int i = 0; i < ratings.length; i++)
+            total += cand[i];
+        
+        return total;
+    }
+}
