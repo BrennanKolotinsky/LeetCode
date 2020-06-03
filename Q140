@@ -1,0 +1,84 @@
+class TrieNode {
+    
+    boolean isWord;
+    TrieNode[] children;
+    
+    public TrieNode() {
+        isWord = false;
+        children = new TrieNode[26];
+    }
+    
+    public void addWord(String word, TrieNode root) {
+        TrieNode tmp = root;
+        
+        for (char c : word.toCharArray()) {
+            int n = c - 'a';
+            if (tmp.children[n] == null)
+                tmp.children[n] = new TrieNode();
+            tmp = tmp.children[n];
+        }
+        
+        tmp.isWord = true;
+    }
+}
+
+class Solution {
+    
+    TrieNode root;
+    boolean[][] memo; // true indicates there is no possible path from this point onwards
+    List<String> sol;
+    
+    public Solution() {
+        this.root = new TrieNode();
+        this.sol = new ArrayList<>();
+    }
+    
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        this.memo = new boolean[s.length()][s.length()];
+        
+        // create all the trienodes
+        for (String word : wordDict)
+            this.root.addWord(word, this.root);
+        
+        dfs(s, 0, 0, this.root, new StringBuilder());
+        return this.sol;
+    }
+    
+    // if there are no possible combinations at this point let's return -1 with memoization
+    public boolean dfs(String s, int pos, int startPos, TrieNode curr, StringBuilder sb) {
+        if (s.length() == pos && curr.isWord) {
+            this.sol.add(sb.append(s.substring(startPos, pos)).toString());
+            return false;
+        } else if (s.length() == pos) // not a complete word
+            return true;
+        
+        int n = s.charAt(pos) - 'a';
+        curr = curr.children[n]; // advance
+        
+        // quick check if we can access this path
+        if (memo[startPos][pos])
+            return true;
+        
+        // no way to complete this path
+        if (curr == null) {
+            memo[startPos][pos] = true;
+            return true;
+        }
+        else {
+            
+            StringBuilder tmp = new StringBuilder(sb.toString());
+            
+            boolean cantComp = dfs(s, pos + 1, startPos, curr, sb);
+            
+            // second condition is to avoid double adding the final solution
+            if (curr.isWord) {
+                boolean cantComp2 = dfs(s, pos + 1, pos + 1, this.root, new StringBuilder(tmp.append(s.substring(startPos, pos + 1) + " ").toString()));
+                
+                cantComp = cantComp && cantComp2;
+            }
+            
+            memo[startPos][pos] = cantComp;
+            return cantComp;
+        }
+    }
+}
