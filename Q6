@@ -1,0 +1,54 @@
+class Solution {
+    public String convert(String s, int numRows) {
+        
+        if (numRows == 1)
+            return s;
+        
+        // simulation solution
+        char[][] tmp = new char[numRows][s.length()];
+        
+        int i = 0, posy = 0, posx = 0;
+        boolean down = true;
+        
+        while (i < s.length()) {
+            
+            if (down) {
+                tmp[posy][posx] = s.charAt(i);
+                
+                // change future direction
+                if (posy == numRows - 1) {
+                    down = false;
+                    posy--;
+                    posx++;
+                }
+                else
+                    posy++;
+                    
+            } else {
+                tmp[posy][posx] = s.charAt(i);
+                
+                // change future direction
+                if (posy == 0) {
+                    down = true;
+                    posy++;
+                }
+                else {
+                    posy--;
+                    posx++;
+                }
+            }
+            
+            i++;
+        }
+        
+        String sol = "";
+        for (i = 0; i < tmp.length; i++)
+            for (int j = 0; j < tmp[i].length; j++)
+                if (tmp[i][j] != 0)
+                    sol += tmp[i][j];
+        
+        //System.out.println(Arrays.deepToString(tmp).replace("], ", "]\n"));
+        
+        return sol;
+    }
+}
