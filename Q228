@@ -16,11 +16,10 @@ class Solution {
                 
                 
                 // we have a range or an individual value
-                if (secondInd > firstInd) {
-                    curr = String.valueOf(nums[firstInd]) + "->" + String.valueOf(nums[secondInd]);
-                } else {
-                    curr = String.valueOf(nums[firstInd]);
-                }
+                if (secondInd > firstInd)
+                    curr = nums[firstInd] + "->" + nums[secondInd];
+                else
+                    curr = nums[firstInd] + "";
                 
                 sol.add(curr);
                 firstInd = i; // advance the first index of the next range to this value
@@ -30,11 +29,10 @@ class Solution {
         }
         
         // add the last value!
-        if (secondInd > firstInd) {
-            curr = String.valueOf(nums[firstInd]) + "->" + String.valueOf(nums[secondInd]);
-        } else {
-            curr = String.valueOf(nums[firstInd]);
-        }
+        if (secondInd > firstInd)
+            curr = nums[firstInd] + "->" + nums[secondInd];
+        else
+            curr = nums[firstInd] + "";
 
         sol.add(curr);
         
