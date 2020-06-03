@@ -5,27 +5,28 @@ class Solution {
             return s;
         
         // simulation solution
-        char[][] tmp = new char[numRows][s.length()];
+        StringBuilder[] sbs = new StringBuilder[numRows];
+        for (int i = 0; i < numRows; i++)
+            sbs[i] = new StringBuilder();
         
-        int i = 0, posy = 0, posx = 0;
+        int i = 0, posy = 0;
         boolean down = true;
         
         while (i < s.length()) {
             
             if (down) {
-                tmp[posy][posx] = s.charAt(i);
+                sbs[posy].append(s.charAt(i));
                 
                 // change future direction
                 if (posy == numRows - 1) {
                     down = false;
                     posy--;
-                    posx++;
                 }
                 else
                     posy++;
                     
             } else {
-                tmp[posy][posx] = s.charAt(i);
+                sbs[posy].append(s.charAt(i));
                 
                 // change future direction
                 if (posy == 0) {
@@ -34,7 +35,6 @@ class Solution {
                 }
                 else {
                     posy--;
-                    posx++;
                 }
             }
             
@@ -42,10 +42,8 @@ class Solution {
         }
         
         StringBuilder sb = new StringBuilder();
-        for (i = 0; i < tmp.length; i++)
-            for (int j = 0; j < tmp[i].length; j++)
-                if (tmp[i][j] != 0)
-                    sb.append(tmp[i][j]);
+        for (i = 0; i < numRows; i++)
+            sb.append(sbs[i]);
         
         //System.out.println(Arrays.deepToString(tmp).replace("], ", "]\n"));
         
