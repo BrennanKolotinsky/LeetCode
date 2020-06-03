@@ -1,0 +1,23 @@
+class Solution {
+    public List<Integer> getRow(int rowIndex) {
+        int[][] tmp = new int[rowIndex + 1][rowIndex + 1];
+        
+        tmp[0][0] = 1;
+        
+        for (int i = 1; i < rowIndex + 1; i++) {
+            
+            tmp[i][0] = 1; // insert new val
+            for (int j = 1; j < i; j++) {
+                tmp[i][j] = tmp[i - 1][j - 1] + tmp[i - 1][j];
+            }
+            tmp[i][i] = 1;
+        }
+        
+        List<Integer> sol = new ArrayList<>();
+        
+        for (int n : tmp[rowIndex])
+            sol.add(n);
+        
+        return sol;
+    }
+}
