@@ -41,14 +41,14 @@ class Solution {
             i++;
         }
         
-        String sol = "";
+        StringBuilder sb = new StringBuilder();
         for (i = 0; i < tmp.length; i++)
             for (int j = 0; j < tmp[i].length; j++)
                 if (tmp[i][j] != 0)
-                    sol += tmp[i][j];
+                    sb.append(tmp[i][j]);
         
         //System.out.println(Arrays.deepToString(tmp).replace("], ", "]\n"));
         
-        return sol;
+        return sb.toString();
     }
 }
