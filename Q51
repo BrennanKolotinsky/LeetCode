@@ -1,0 +1,113 @@
+class Solution {
+    
+    private List<List<String>> sol;
+    private int[][] mvs = {{1, -1}, {1, 1}, {-1, 1}, {-1, -1}}; // these are the diagonal moves we could potentially make
+    private String periods; // this is the default string in a row
+    
+    public Solution() {
+        this.sol = new ArrayList<>();
+    }
+    
+    public List<List<String>> solveNQueens(int n) {
+        
+        List<String> tmp = startBoard(n);
+        
+        // we will cache whether the horizontal and vertical are free -- it may be possible to cache diagonals too -- however, I never considered it -- I would need to analyze a board and check for patterns
+        boolean[] hor = new boolean[n];
+        
+        dfs(tmp, n, 0, hor, 0);
+        
+        return this.sol;
+    }
+    
+    public void dfs(List<String> curr, int n, int added, boolean[] hor, int vert) {
+        
+        if (n == added) {
+            // we need to clone so that the answer doesn't change as we update in the future
+            List<String> cloned = clone(curr);
+            this.sol.add(cloned);
+            return;
+        }
+            
+        for (int j = 0; j < n; j++) {
+            if (hor[j])
+                continue;
+
+            boolean skip = false;
+
+            for (int[] mv : this.mvs) {
+                // we can't add due to this check
+                if (!check(curr, j + mv[0], vert + mv[1], mv[0], mv[1])) {
+                    skip = true;
+                    break;
+                }
+            }
+
+            if (skip)
+                continue;
+
+            hor[j] = true;
+
+            // create a new string with the added q on the board
+            String tmp = addQ(j);
+            curr.set(vert, tmp);
+            dfs(curr, n, added + 1, hor, vert + 1);
+
+            // reset the changes made for the next loops!
+            hor[j] = false;
+            curr.set(vert, this.periods); // reset to all periods
+        }
+    }
+    
+    public String addQ(int x) {
+        StringBuilder sb = new StringBuilder("");
+        for (int i = 0; i < x; i++)
+            sb.append(".");
+        
+        sb.append("Q");
+        
+        for (int i = x + 1; i < this.periods.length(); i++)
+            sb.append(".");
+        
+        return sb.toString();
+    }
+    
+    // returns true if we can add the value
+    public boolean check(List<String> curr, int x, int y, int mvx, int mvy) { 
+        // made it to the end successfully
+        if (x < 0 || x == curr.size() || y < 0 || y == curr.size())
+            return true;
+        
+        if (curr.get(y).charAt(x) == 'Q')
+            return false;
+        
+        return check(curr, x + mvx, y + mvy, mvx, mvy);
+    }
+    
+    // initialize a board with . -- we will add the Qs later
+    public List<String> startBoard(int n) {
+        List<String> board = new ArrayList<>();
+        
+        // create a temporary starting board of periods
+        StringBuilder sb = new StringBuilder("");
+        for (int i = 0; i < n; i++)
+            sb.append(".");
+        
+        this.periods = sb.toString();
+        
+        for (int i = 0; i < n; i++)
+            board.add(this.periods);
+        
+        return board;
+    }
+    
+    // creates a deep clone of a board -- so that future changes of the original won't edit the copy (and changes vice-versa but irrelevant here)
+    public List<String> clone(List<String> board) {
+        List<String> clone = new ArrayList<>();
+        
+        for (String s : board)
+            clone.add(s);
+        
+        return clone;
+    }
+}
