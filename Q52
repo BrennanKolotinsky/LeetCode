@@ -8,25 +8,26 @@ class Solution {
         this.sol = new ArrayList<>();
     }
     
-    public int totalNQueens(int n) {
+    public List<List<String>> solveNQueens(int n) {
         
-        List<String> tmp = startBoard(n);
+        boolean[][] tmp = new boolean[n][n]; // true represents a queen
         
         // we will cache whether the horizontal and vertical are free -- it may be possible to cache diagonals too -- however, I never considered it -- I would need to analyze a board and check for patterns
         boolean[] hor = new boolean[n];
         
-        return dfs(tmp, n, 0, hor, 0);
+        dfs(tmp, n, 0, hor, 0);
+        return this.sol;
     }
     
-    public int dfs(List<String> curr, int n, int added, boolean[] hor, int vert) {
+    public void dfs(boolean[][] curr, int n, int added, boolean[] hor, int vert) {
         
         if (n == added) {
             // we need to clone so that the answer doesn't change as we update in the future
-            return 1;
+            List<String> tmp = createBoard(curr);
+            sol.add(tmp);
+            return;
         }
-        
-        int cnt = 0;
-            
+                    
         for (int j = 0; j < n; j++) {
             if (hor[j])
                 continue;
@@ -47,57 +48,36 @@ class Solution {
             hor[j] = true;
 
             // create a new string with the added q on the board
-            String tmp = addQ(j);
-            curr.set(vert, tmp);
-            cnt += dfs(curr, n, added + 1, hor, vert + 1);
+            curr[vert][j] = true;
+            dfs(curr, n, added + 1, hor, vert + 1);
 
             // reset the changes made for the next loops!
             hor[j] = false;
-            curr.set(vert, this.periods); // reset to all periods
-        }
-        
-        return cnt;
-    }
-    
-    public String addQ(int x) {
-        StringBuilder sb = new StringBuilder("");
-        for (int i = 0; i < x; i++)
-            sb.append(".");
-        
-        sb.append("Q");
-        
-        for (int i = x + 1; i < this.periods.length(); i++)
-            sb.append(".");
-        
-        return sb.toString();
+            curr[vert][j] = false; // reset to all periods
+        }        
     }
     
     // returns true if we can add the value
-    public boolean check(List<String> curr, int x, int y, int mvx, int mvy) { 
+    public boolean check(boolean[][] curr, int x, int y, int mvx, int mvy) { 
         // made it to the end successfully
-        if (x < 0 || x == curr.size() || y < 0 || y == curr.size())
+        if (x < 0 || x == curr.length || y < 0 || y == curr.length)
             return true;
         
-        if (curr.get(y).charAt(x) == 'Q')
-            return false;
-        
-        return check(curr, x + mvx, y + mvy, mvx, mvy);
+        return curr[y][x] ? false : check(curr, x + mvx, y + mvy, mvx, mvy);
     }
     
-    // initialize a board with . -- we will add the Qs later
-    public List<String> startBoard(int n) {
-        List<String> board = new ArrayList<>();
+    public List<String> createBoard(boolean[][] board) {
+        List<String> ans = new ArrayList<>();
         
-        // create a temporary starting board of periods
-        StringBuilder sb = new StringBuilder("");
-        for (int i = 0; i < n; i++)
-            sb.append(".");
-        
-        this.periods = sb.toString();
-        
-        for (int i = 0; i < n; i++)
-            board.add(this.periods);
-        
-        return board;
+        for (boolean[] ln : board) {
+            StringBuilder sb = new StringBuilder("");
+            
+            for (boolean c : ln)
+                sb.append(c ? "Q" : ".");
+
+            ans.add(sb.toString());
+        }
+            
+        return ans;   
     }
 }
