@@ -1,16 +1,14 @@
 class Solution {
     public int findComplement(int num) {
         
-        int n = 0;        
-        int mask = 1;
+        int n = 0, mask = 1;
         while (num > 0) {
             
-            if (num % 2 == 0) {
-                n += mask;
-            }
+            if ((num & 1) == 0)
+                n |= mask; // set the bit on -- same as n += mask because its only the one bit that hasn't been set!
             
             num >>= 1;
-            mask <<= 1;
+            mask <<= 1; // this basically multiplies by two each time, starting with 1
         }
         
         return n;
