@@ -1,0 +1,5 @@
+class Solution {
+    public boolean rotateString(String A, String B) {
+        return A.length() == B.length() && (A + A).contains(B); // A + A covers every possible rotation, why we sometimes loop twice!
+    }
+}
