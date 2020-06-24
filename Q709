@@ -1,0 +1,11 @@
+class Solution {
+    public String toLowerCase(String str) {
+        char[] ltrs = str.toCharArray();
+        
+        for (int i = 0; i < ltrs.length; i++)
+            if (ltrs[i] >= 'A' && ltrs[i] <= 'Z')
+                ltrs[i] = (char) (ltrs[i] - 'A' + 'a'); // convert the asc-II value from capital to lower case
+        
+        return new String(ltrs);
+    }
+}
