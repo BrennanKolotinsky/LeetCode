@@ -1,0 +1,45 @@
+class Solution {
+    public boolean isAdditiveNumber(String num) {
+        return dfs(num, 0, -1, -1, false);
+    }
+    
+    public boolean dfs(String num, int pos, long prev1, long prev2, boolean threeNum)  {
+        if (threeNum == true && pos == num.length())
+            return true;
+        
+        for (int i = pos + 1; i <= num.length(); i++) {
+            
+            String currStr = num.substring(pos, i);
+            
+            // this handles large numbers, if the number is bigger ex. "11235813213455890144" let's just return false 
+            Long curr;
+            try {
+                curr = Long.parseLong(currStr);
+            } catch (NumberFormatException e) {
+                return false;
+            }
+            
+            // first passes
+            if (prev1 == -1) {
+                if (dfs(num, i, curr, -1, false))
+                    return true;
+            } else if (prev2 == -1) {
+                if (dfs(num, i, prev1, curr, false))
+                    return true;
+            } else if (prev1 + prev2 == curr) {
+
+                if (dfs(num, i, prev2, curr, true))
+                    return true;
+            } else if (prev1 + prev2 < curr) {
+                // saves additional checks which aren't possible
+                return false;
+            }
+            
+            // handles edge cases 1023 -- otherwise we try 1, 02, 3 essentially skipping over zeros!
+            if (curr == 0)
+                return false;
+        }
+        
+        return false;
+    }
+}
