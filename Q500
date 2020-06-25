@@ -1,0 +1,40 @@
+class Solution {
+    public String[] findWords(String[] words) {
+        
+        Queue<String> q = new LinkedList<>();
+        
+        for (String word : words) {
+            if (word.equals("")) {
+                q.add(word);
+                continue;
+            }
+            
+            char first = word.charAt(0);
+            boolean add = true;
+            if ("qwertyuiopQWERTYUIOP".contains(first + ""))
+                add = repeatedChar(word, "qwertyuiopQWERTYUIOP");
+            else if ("asdfghjklASDFGHJKL".contains(first + ""))
+                add = repeatedChar(word, "asdfghjklASDFGHJKL");
+            else if ("zxcvbnmZXCVBNM".contains(first + ""))
+                add = repeatedChar(word, "zxcvbnmZXCVBNM");
+            
+            if (add)
+                q.offer(word);
+        }
+        
+        String[] sol = new String[q.size()];
+        int i = 0;
+        while (!q.isEmpty())
+            sol[i++] = q.poll();
+        
+        return sol;
+    }
+    
+    public boolean repeatedChar(String word, String check) {
+        for (char c : word.toCharArray())
+            if (!check.contains(c + ""))
+                return false;
+        
+        return true;
+    }
+}
