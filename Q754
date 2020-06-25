@@ -1,0 +1,25 @@
+class Solution {
+    public int reachNumber(int target) {
+        
+        // weird math problem
+        
+        target = Math.abs(target); // positive will have the same number of steps as neg
+        
+        // simple BFS same question we've seen a million times
+        int steps = 0;
+        int curr = 0;
+        
+        while (curr < target) {
+            steps++;
+            curr += steps;
+        }
+        
+        // we can take one of any of the even numbers to find the difference
+        while ((curr - target) % 2 != 0) {
+            steps++;
+            curr += steps;
+        }
+        
+        return steps;
+    }
+}
