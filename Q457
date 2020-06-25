@@ -1,0 +1,40 @@
+class Solution {
+    public boolean circularArrayLoop(int[] nums) {
+        
+        if (nums.length == 1)
+            return false;
+        
+        // tortoise and hare
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            if (nums[i] == 0)
+                continue;
+            
+            int slow = i, fast = getInd(i + nums[i], len);
+                        
+            // while both are positive our both negative (and neither zero)!
+            while (nums[i] * nums[fast] > 0 && nums[getInd(fast + nums[fast], len)] * nums[i] > 0) {
+                if (slow == fast) {
+                    // check for single item in loop
+                    if (slow != getInd(slow + nums[slow], len))
+                        return true;
+                    else
+                        break;
+                }
+                
+                slow = getInd(nums[slow] + slow, len);
+                fast = getInd(nums[fast] + fast, len);                
+                fast = getInd(nums[fast] + fast, len);
+            }
+        }
+        
+        return false;
+    }
+    
+    public int getInd(int n, int len) {
+        if (n >= 0)
+            return n % len;
+        else
+            return len + (n % len); // negative numbers, take the negative remained and add it (which essentailly subtracts!)
+    }
+}
