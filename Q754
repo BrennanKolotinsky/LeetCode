@@ -15,6 +15,9 @@ class Solution {
         }
         
         // we can take one of any of the even numbers to find the difference
+        // needs to be even because when we swap a number we lose twice the difference
+        // all even numbers (the difference) can be formed by doubling another number
+        // whereas a number times two will never be odd!
         while ((curr - target) % 2 != 0) {
             steps++;
             curr += steps;
