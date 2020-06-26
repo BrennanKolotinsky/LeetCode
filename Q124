@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int maxPathSum(TreeNode root) {
+        if (root == null)
+            return Integer.MIN_VALUE;
+        
+        return Math.max(dfs(root, 0, true), Math.max(maxPathSum(root.left), maxPathSum(root.right)));
+    }
+    
+    // repeatedly call main function to hit every path!
+    // also only add side paths that are POSITIVE
+    // can fork exactly one time one the first call
+    public int dfs(TreeNode root, int curr, boolean splitAvail) {
+        if (root == null)
+            return curr;
+        
+        curr += root.val;
+        
+        int left = dfs(root.left, curr, false);
+        int right = dfs(root.right, curr, false);
+        
+        if (splitAvail && (left + right - curr) > left && (left + right - curr) > right && (left + right - curr) > curr)
+            return left + right - curr; // avoid double counting
+        else
+            return Math.max(curr, Math.max(left, right));
+    }
+}
