@@ -1,0 +1,50 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    
+    TreeNode leftMost;
+    TreeNode rightMost;
+    TreeNode prev;
+    
+    public void recoverTree(TreeNode root) {
+        dfs(root);
+        
+        int tmp = leftMost.val;
+        leftMost.val = rightMost.val;
+        rightMost.val = tmp;
+    } 
+    
+    public void dfs(TreeNode root) {
+    // do an inorder traversal -- find the first leftmost node that breaks the rule, and the second node will be the rightmost node
+        if (root == null)
+            return;
+        
+        dfs(root.left);
+        
+        // equals handles edge case with repeats breaking, the first repeat must be swapped
+        if (prev != null && prev.val >= root.val) {
+            // find the most left node that breaks the traversal
+            if (leftMost == null)
+                leftMost = prev;
+            
+            // find the last element that breaks the traversal
+            rightMost = root;
+        }
+        
+        prev = root;
+        dfs(root.right);
+    }
+}
