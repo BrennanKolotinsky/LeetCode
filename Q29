@@ -1,0 +1,46 @@
+// class Solution {
+//     public int divide(int dividend, int divisor) {
+        
+//         // stupid edge case
+//         if (divisor == -1 && dividend == Integer.MIN_VALUE)
+//             return Integer.MAX_VALUE;
+        
+//         int cnt = 0;
+//         int a = Math.abs(dividend), b = Math.abs(divisor);
+        
+//         while (a - b >= 0) {
+//             cnt++;
+//             a -= b;
+//         }
+        
+//         return (dividend >= 0) == (divisor >= 0) ? cnt : -cnt;   
+//     }
+// }
+
+
+class Solution {
+    public int divide(int dividend, int divisor) {
+        
+        // stupid edge case
+        if (divisor == -1 && dividend == Integer.MIN_VALUE)
+            return Integer.MAX_VALUE;
+        
+        int cnt = 0;
+        int a = Math.abs(dividend), b = Math.abs(divisor);
+        
+        // repeatedly try to subtract the divisor, if the divisor evenly substracts, let's try multiplying it by two repeatedly (by shifting the bits) -- this speeds up the calculation rather than just substracting b everytime. Once it can no longer by 2, let's subtract the number we found and try to subtract the starting b again!
+        
+        while (a - b >= 0) {
+            int x = 0;
+            
+            while (a - (b << 1 << x) >= 0) {
+                x++;
+            }
+            
+            cnt += 1 << x;
+            a -= b << x;
+        }
+        
+        return (dividend >= 0) == (divisor >= 0) ? cnt : -cnt;   
+    }
+}
