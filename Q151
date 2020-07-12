@@ -1,0 +1,37 @@
+class Solution {
+    public String reverseWords(String s) {
+        String[] tmp = s.split(" ");
+        int i = 0, j = tmp.length - 1;
+        
+        while (i < j) {
+            // skip empty strings
+            while (i < tmp.length - 1 && tmp[i].equals(" "))
+                i++;
+            
+            while (j > 0 && tmp[j].equals(" "))
+                j--;
+            
+            if (i >= j)
+                break;
+            
+            String st = tmp[i];
+            tmp[i] = tmp[j];
+            tmp[j] = st;
+            
+            i++;
+            j--;
+        }
+        
+        StringBuilder sb = new StringBuilder("");
+        
+        for (String st : tmp)
+            if (!st.equals(""))
+                sb.append(st).append(" ");
+        
+        // remove extra space!
+        if (sb.length() > 0)
+            sb.setLength(sb.length() - 1);
+                
+        return sb.toString();
+    }
+}
