@@ -41,14 +41,7 @@ class Solution {
             tmp.right = savedRight; // attach onto the rightmost position!
 
         } else if (root.right != null) {
-            TreeNode savedLeft = root.left;
-            root = root.right;
-            
-            TreeNode tmp = root;
-            while (tmp.left != null) {
-                tmp = tmp.left;
-            }
-            tmp.left = savedLeft;
+            root = root.right; // no left nodes exist, so don't bother adding the left side!
             
         } else {
             root = null; // no children to replace!
