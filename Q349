@@ -1,0 +1,24 @@
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        HashSet<Integer> s1 = new HashSet<>();
+        HashSet<Integer> sol = new HashSet<>();
+        
+        for (int n : nums1)
+            s1.add(n);
+        
+        for (int n : nums2)
+            if (s1.contains(n)) {
+                s1.remove(n);
+                sol.add(n);
+            }
+            
+        int[] res = new int[sol.size()];
+        
+        int i = 0;
+        for (int n : sol) {
+            res[i++] = n;
+        }
+        
+        return res;
+    }
+}
