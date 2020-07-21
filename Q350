@@ -1,0 +1,27 @@
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        Queue<Integer> q = new LinkedList<>();
+        
+        for (int n : nums1)
+            map.put(n, map.getOrDefault(n, 0) + 1);
+        
+        for (int n : nums2)
+            if (map.containsKey(n)) {
+                int occ = map.get(n);
+                if (occ == 1) 
+                    map.remove(n);
+                else 
+                    map.put(n, occ - 1);
+                q.offer(n);
+            }
+            
+        int[] res = new int[q.size()];
+        
+        int i = 0;
+        while (!q.isEmpty())
+            res[i++] = q.poll();
+        
+        return res;
+    }
+}
