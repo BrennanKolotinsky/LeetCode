@@ -1,0 +1,10 @@
+class Solution {
+    public int addDigits(int num) {
+        while (num >= 10) {
+            int tmp = (num % 10) + (num / 10 % 10); // add the last two digits
+            num = num / 100 + tmp; // remove the last two digits, and then add back that number!
+        }
+        
+        return num;
+    }
+}
