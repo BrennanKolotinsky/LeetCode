@@ -1,0 +1,59 @@
+class Solution {
+    public int[] findDiagonalOrder(int[][] matrix) {
+        if (matrix.length == 0)
+            return new int[]{};
+        
+        // simulation
+        int[] sol = new int[matrix.length * matrix[0].length];
+        int added = 1;
+        sol[0] = matrix[0][0];
+        
+        // start moving left everytime at matrix[0][1] (unless matrix size is only 1)
+        int row, col;
+        boolean left;
+        if (matrix[0].length > 1) {
+            left = true;
+            row = 0; 
+            col = 1;
+        } else {
+            left = true;
+            row = 1;
+            col = 0;    
+        }
+        
+        while (added < sol.length) {
+            sol[added++] = matrix[row][col];
+            
+            if (left) {
+                if (col != 0 && row != matrix.length - 1) {
+                    col--;
+                    row++;
+                } else {
+                    left = false;
+                    
+                    // adding one to column takes precedence over adding one to row (if both col == 0 && row == matrix.length - 1) -- take a 2 x 2 matrix to understand
+                    if (row == matrix.length - 1) {
+                        col++;
+                    } else {
+                        row++;
+                    }   
+                }
+            } else {
+                if (col != matrix[0].length - 1 && row != 0) {
+                    col++;
+                    row--;
+                } else {
+                    left = true;
+                    
+                    if (col == matrix[0].length - 1) {
+                        row++;
+                    } else {
+                        col++;
+                    } 
+                }
+            }
+        }
+        
+        return sol;
+    }
+}
