@@ -25,13 +25,12 @@ class Solution {
         while (!q.isEmpty()) {
             
             int len = q.size();
-            boolean endOfRow = false;
             
             while (len > 0) {
                 TreeNode curr = q.poll();
                 
                 // another node in this line was incomplete
-                if (endOfRow && (curr.left != null || curr.right != null) || hitEnd && (curr.left != null || curr.right != null))
+                if (hitEnd && (curr.left != null || curr.right != null))
                     return false;
                 
                 // can't have a right without a left
@@ -39,13 +38,11 @@ class Solution {
                     return false;
                 else if (curr.left != null && curr.right == null) {
                     q.offer(curr.left);
-                    endOfRow = true; // row ends here
                     hitEnd = true;
                 } else if (curr.left != null && curr.right != null) {
                     q.offer(curr.left);
                     q.offer(curr.right);
                 } else { // both left and right null
-                    endOfRow = true;
                     hitEnd = true;
                 }
                    
