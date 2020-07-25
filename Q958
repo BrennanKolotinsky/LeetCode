@@ -1,0 +1,58 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    
+    public boolean isCompleteTree(TreeNode root) {
+        
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
+        
+        boolean hitEnd = false; // this will mark the first incomplete row to ensure we don't go passed it
+        
+        while (!q.isEmpty()) {
+            
+            int len = q.size();
+            boolean endOfRow = false;
+            
+            while (len > 0) {
+                TreeNode curr = q.poll();
+                
+                // another node in this line was incomplete
+                if (endOfRow && (curr.left != null || curr.right != null) || hitEnd && (curr.left != null || curr.right != null))
+                    return false;
+                
+                // can't have a right without a left
+                if (curr.right != null && curr.left == null)
+                    return false;
+                else if (curr.left != null && curr.right == null) {
+                    q.offer(curr.left);
+                    endOfRow = true; // row ends here
+                    hitEnd = true;
+                } else if (curr.left != null && curr.right != null) {
+                    q.offer(curr.left);
+                    q.offer(curr.right);
+                } else { // both left and right null
+                    endOfRow = true;
+                    hitEnd = true;
+                }
+                   
+                len--;
+            }
+        }
+        
+        return true;
+    }
+}
