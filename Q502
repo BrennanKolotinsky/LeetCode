@@ -1,0 +1,40 @@
+class Solution {
+    public int findMaximizedCapital(int k, int W, int[] Profits, int[] Capital) {
+        // Priority Queue
+        // IF we have the amount of profits to support the project (or more)
+        // then let's sort by the max profits
+        // ELSE let's try to find another project and then add it back after completing that project
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> Profits[b] - Profits[a]); // Highest profit projects first
+        
+        for (int i = 0; i < Profits.length; i++)
+            // only add projects that add value!
+            if (Profits[i] > 0)
+                pq.offer(i);
+        
+        while (!pq.isEmpty() && k > 0) {
+            
+            List<Integer> tmp = new ArrayList<>(); // store numbers popped from our queue of projects that couldn't be completed, then add them back if we successfully find a project that can be completed -- we could potentially finance these projects on our next project
+            
+            while (!pq.isEmpty() && W < Capital[pq.peek()])
+                tmp.add(pq.poll());
+            
+            // can't complete any projects, let's break!
+            if (pq.isEmpty())
+                break;
+            
+            W += Profits[pq.poll()];
+            
+            // add back the projects with higher profits that couldn't be completed
+            for (int n : tmp)
+                pq.offer(n);
+            
+            k--;
+        }
+        
+        // integer will contain the project number!
+        // b - a --> true bigger first --> b first
+        
+        return W;
+    }
+}
