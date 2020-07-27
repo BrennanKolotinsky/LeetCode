@@ -1,0 +1,53 @@
+class Solution {
+    
+    int[][] memo;
+    
+    public int findRotateSteps(String ring, String key) {
+        
+        // ring = "ga";
+        // key = ring;
+        
+        // Dynamic Programming -- let's start with memoization that create the DP solution
+        this.memo = new int[ring.length()][key.length()]; // the first key is the position on the ring we are on, the second is how many letters we have completed!
+        return dfs(ring, key, 0, 0);
+    }
+    
+    // pos represents the pos of the ring we are sitting on, and the steps represents how many letters we've gone through
+    public int dfs(String ring, String key, int pos, int steps) {
+        
+        if (steps == key.length())
+            return 0;
+        
+        if (this.memo[pos][steps] != 0)            
+            return this.memo[pos][steps];
+        
+        // have we already analyzed one path? -- no point moving further left or right from this position
+        boolean clockWise = false;
+        boolean counterClockWise = false;
+        int clockSteps = Integer.MAX_VALUE, counterClockSteps = Integer.MAX_VALUE;
+        
+        for (int i = 0; i < ring.length(); i++) {
+            int curr = (i + pos) % ring.length(); // handles loop
+            if (!clockWise && ring.charAt(curr) == key.charAt(steps)) {
+                clockSteps = i + dfs(ring, key, curr, steps + 1);
+                clockWise = true;
+                
+            }
+            
+            int curr2 = pos - i;
+            if (curr2 < 0)
+                curr2 = ring.length() + pos - i; // every position we are negative is one off of the length!
+            
+            if (!counterClockWise && ring.charAt(curr2) == key.charAt(steps)) {
+                counterClockSteps = i + dfs(ring, key, curr2, steps + 1);
+                counterClockWise = true;
+            }
+            
+            if (clockWise && counterClockWise)
+                break;
+        }
+        
+        this.memo[pos][steps] = Math.min(clockSteps, counterClockSteps) + 1; // +1 to click the button
+        return this.memo[pos][steps];
+    }
+}
