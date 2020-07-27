@@ -1,0 +1,56 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    
+    HashMap<Integer, Integer> map = new HashMap<>();
+    int cntAtThisMode = 0;
+    int maxMode = 0;
+    
+    public int[] findFrequentTreeSum(TreeNode root) {
+        dfs(root);
+        
+        int[] res = new int[this.cntAtThisMode];
+        int i = -1;
+                
+        for (int key : map.keySet()) {
+            if (map.get(key) == this.maxMode)
+                res[++i] = key;
+        }
+        
+        return res; 
+    }
+    
+    public int dfs(TreeNode root) {
+        if (root == null)
+            return 0;
+        
+        int left = dfs(root.left);
+        int right = dfs(root.right);
+        int val = root.val + left + right;
+        
+        int modeOfThisNum = this.map.containsKey(val) ? this.map.get(val) + 1 : 1;
+        this.map.put(val, modeOfThisNum);
+        
+        if (modeOfThisNum == this.maxMode)
+            this.cntAtThisMode++;
+        else if (modeOfThisNum > this.maxMode) {
+            this.cntAtThisMode = 1; // only one value has this mode now
+            this.maxMode++;
+        }
+        
+        return val;
+    }
+}
