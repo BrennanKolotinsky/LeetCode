@@ -1,0 +1,38 @@
+class Solution {
+    public String convertToBase7(int num) {
+        
+        if (num == 0)
+            return "0";
+        
+        StringBuilder sb = new StringBuilder(num < 0 ? "-" : "");
+        
+        num = Math.abs(num);
+        int[] tmp = new int[10];
+        
+        for (int i = 0; i < tmp.length; i++) {
+            int cnt = 0;
+            int expOfSev = (int) Math.pow(7, (tmp.length - 1 - i));
+            
+            while (num - expOfSev >= 0) {
+                cnt++;
+                num -= expOfSev;
+            }
+            
+            tmp[i] = cnt;
+            
+            if (num == 0)
+                break;
+        }
+                
+        boolean fnd = false;
+        for (int n : tmp) {
+            // skip all the empty zeros at the start
+            if (fnd || n != 0) {
+                fnd = true;
+                sb.append(n);
+            }   
+        }
+        
+        return sb.toString();
+    }
+}
