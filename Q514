@@ -3,11 +3,6 @@ class Solution {
     int[][] memo;
     
     public int findRotateSteps(String ring, String key) {
-        
-        // ring = "ga";
-        // key = ring;
-        
-        // Dynamic Programming -- let's start with memoization that create the DP solution
         this.memo = new int[ring.length()][key.length()]; // the first key is the position on the ring we are on, the second is how many letters we have completed!
         return dfs(ring, key, 0, 0);
     }
