@@ -1,0 +1,19 @@
+class Solution {
+    public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+        
+        // split it up into too many piles to see how many ways they are split
+        
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int res = 0;
+        
+        for (int n1 : A)
+            for (int n2 : B)
+                map.put(n1 + n2, map.getOrDefault(n1 + n2, 0) + 1);
+        
+        for (int n1 : C)
+            for (int n2 : D)
+                res += map.getOrDefault(-n1 - n2, 0);
+        
+        return res;
+    }
+}
