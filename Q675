@@ -1,0 +1,74 @@
+class Solution {
+    
+    int[][] mvs = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    
+    public int cutOffTree(List<List<Integer>> forest) {
+        
+        if (forest.size() == 0)
+            return 0;
+        
+        // Priority Queue to find the location
+        // Then BFS to find the quickest way there -- BFS because we are finding steps
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> forest.get(a[0]).get(a[1]) - forest.get(b[0]).get(b[1]));
+        
+        Queue<int[]> loc = new LinkedList<>(); // this will contain all of the locations we could be at with this number of steps
+        loc.offer(new int[2]); // starting position is 0, 0
+        
+        for (int i = 0; i < forest.size(); i++)
+            for (int j = 0; j < forest.get(0).size(); j++)
+                // don't add spots without a tree
+                if (forest.get(i).get(j) != 0)
+                    pq.offer(new int[]{i, j});
+        
+        int steps = 0;
+        
+        while (!pq.isEmpty()) {
+            int[] fnd = pq.poll(); // this is the location we want to find!
+            boolean[][] visited = new boolean[forest.size()][forest.get(0).size()]; // this will make sure we don't revisit locations
+            
+            int currSteps = 0;
+            boolean reached = false;
+            while (!loc.isEmpty()) {
+                
+                int len = loc.size();
+                while (len > 0) {
+                    int[] curr = loc.poll();
+                    
+                    if (curr[0] == fnd[0] && curr[1] == fnd[1]) {
+                        reached = true;
+                        break;
+                    }
+                    
+                    for (int[] mv : mvs)
+                        if (!check(curr[0] + mv[0], curr[1] + mv[1], visited, forest)) {
+                            loc.offer(new int[]{curr[0] + mv[0], curr[1] + mv[1]});
+                            visited[curr[0] + mv[0]][curr[1] + mv[1]] = true; // don't add this location a second time
+                        }
+                    
+                    len--;
+                }
+                
+                if (reached)
+                    break;
+                
+                currSteps++; // another step to check we hit the location
+            }
+            
+            // couldn't find the location
+            if (!reached)
+                return -1;
+            
+            steps += currSteps;
+            loc = new LinkedList<>(); // empty all the locations we didn't check
+            loc.offer(fnd); // add the point we just found as the new starting point!
+        }
+        
+        return steps;
+    }
+    
+    // this checks whether the location we want to add exists and that we haven't already visited it and that it isn't a path we can't cross
+    // false indicates we can't reach it
+    public boolean check(int row, int col, boolean[][] visited, List<List<Integer>> forest) {
+        return row < 0 || row == visited.length || col < 0 || col == visited[0].length || forest.get(row).get(col) == 0 || visited[row][col]; // do any of these conditions pass?
+    }
+}
