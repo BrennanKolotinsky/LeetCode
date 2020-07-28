@@ -1,0 +1,51 @@
+class Solution {
+    
+    int[][] memo;
+    HashMap<Integer, Integer> map;
+    int goal;
+    
+    public boolean canCross(int[] stones) {
+        
+        this.goal = stones[stones.length - 1];
+        this.memo = new int[stones.length][stones.length]; // can you reach the end from this point at this k value? 1 indicates yes, -1 indicates no, 0 indicates not calculated yet -- Note the max k is stones.length -- because each time the number must move forward one
+        
+        this.map = new HashMap<Integer, Integer>();
+        int i = -1;
+        for (int n : stones)
+            this.map.put(n, ++i);
+        
+        return dfs(0, 0, 0);
+    }
+    
+    // curr is our position, k is the last jump we made, pos is the current stone
+    public boolean dfs(int curr, int k, int pos) {
+        
+        // hit the end point
+        if (curr == this.goal)
+            return true;
+        else if (curr > this.goal)
+            return false;
+        
+        int calc = this.memo[pos][k];
+        if (calc == 1)
+            return true;
+        else if (calc == -1)
+            return false;
+        
+        boolean possible = false;
+        
+        // is this a pad?
+        if (this.map.containsKey(curr + k + 1))
+            possible |= dfs(curr + k + 1, k + 1, this.map.get(curr + k + 1));
+        
+        if (k != 0 && this.map.containsKey(curr + k))
+            possible |= dfs(curr + k, k, this.map.get(curr + k));
+        
+        // has to be one because otherwise we would stay in the same place OR worse move backwards
+        if (k > 1 && this.map.containsKey(curr + k - 1))
+            possible |= dfs(curr + k - 1, k - 1, this.map.get(curr + k - 1));
+        
+        this.memo[pos][k] = possible == true ? 1 : -1;
+        return possible;
+    }
+}
