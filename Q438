@@ -1,0 +1,46 @@
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> lst = new ArrayList<>();
+        if (p.length() > s.length())
+            return lst;
+        
+        // SLIDING WINDOW??
+        HashMap<Character, Integer> map = new HashMap<>();
+        
+        for (char c : p.toCharArray())
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        
+        int fnd = 0, j = 0; // fnd is the total number of characters over the window that matches (it doesn't keep add duplicates into the total). For example if we have dsfgaabc and we are looking for abc --> it at position gaa it will equal 1, aab will equal 2 (rather than 3 because we only need one a) and and abc will equal 3
+        char[] arr = s.toCharArray();
+        
+        for (int i = 0; i < s.length(); i++) {
+            if (map.containsKey(arr[i])) {
+                int curr = map.get(arr[i]) - 1;
+                map.put(arr[i], curr);
+                
+                if (curr >= 0) {
+                    fnd++;
+                    
+                    if (fnd == p.length())
+                        lst.add(j);
+                }
+            }
+            
+            // if we have passed the full length, let's start advancing j, and removing letters
+            if (i >= p.length() - 1) {
+                if (map.containsKey(arr[j])) {
+                    int curr = map.get(arr[j]) + 1;
+                    map.put(arr[j], curr);
+                    
+                    // if just removed a letter that is vital, we have one less of all of them required
+                    if (curr > 0)
+                        fnd--;
+                }
+                
+                j++;
+            }
+        }
+            
+        return lst;
+    }
+}
