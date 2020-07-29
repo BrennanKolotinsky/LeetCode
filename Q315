@@ -1,0 +1,58 @@
+class TreeNode {
+    public int cnt, dups = 1, val; // count is the number of nodes (and dups) to the left
+    public TreeNode left, right;
+    
+    public TreeNode(int val) {
+        this.val = val;
+    }
+    
+    public TreeNode(int val, int cnt) {
+        this.val = val;
+        this.cnt = cnt;
+    }
+}
+
+class Solution {
+    
+    TreeNode root;
+    
+    public List<Integer> countSmaller(int[] nums) {
+        
+        Integer[] sol = new Integer[nums.length];
+        if (nums.length == 0)
+            return Arrays.asList(sol);
+        
+        this.root = null;
+        
+        for (int i = nums.length - 1; i >= 0; i--)
+            this.root = addNode(this.root, i, nums[i], sol, 0);
+                
+        return Arrays.asList(sol);
+    }
+    
+    public TreeNode addNode(TreeNode curr, int i, int val, Integer[] sol, int elementsLeft) {
+        if (curr == null) {
+            sol[i] = elementsLeft;
+            curr = new TreeNode(val);
+        } else if (curr.val == val) {
+            sol[i] = elementsLeft + curr.cnt;
+            curr.dups++;
+        } else if (curr.val < val) {
+            curr.right = addNode(curr.right, i, val, sol, elementsLeft + curr.dups + curr.cnt);
+        } else if (curr.val > val) {
+            curr.cnt++;
+            curr.left = addNode(curr.left, i, val, sol, elementsLeft);
+        }
+          
+        return curr;
+    }
+    
+    public void traverse(TreeNode curr) {
+        if (curr == null)
+            return;
+        
+        traverse(curr.left);
+        System.out.println("At value " + curr.val + " there are this many smaller elements " + curr.cnt);
+        traverse(curr.right);
+    }
+}
