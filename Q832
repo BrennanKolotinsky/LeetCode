@@ -1,0 +1,23 @@
+class Solution {
+    public int[][] flipAndInvertImage(int[][] A) {
+        
+        for (int i = 0; i < A.length; i++) {
+            for (int j = 0; j < A[0].length / 2; j++) {
+                trade(A, i, j, i, A[0].length - j - 1);
+            }
+        }
+        
+        // invert 
+        for (int i = 0; i < A.length; i++)
+            for (int j = 0; j < A[0].length; j++)
+                A[i][j] = A[i][j] == 1 ? 0 : 1;
+        
+        return A;
+    }
+    
+    public void trade(int[][] A, int col1, int row1, int col2, int row2) {
+        int tmp = A[col1][row1];
+        A[col1][row1] = A[col2][row2];
+        A[col2][row2] = tmp; 
+    }
+}
