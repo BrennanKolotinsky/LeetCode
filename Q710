@@ -1,0 +1,38 @@
+class Solution {
+    
+    HashMap<Integer, Integer> map;
+    int nums;
+    Random r;
+
+    public Solution(int N, int[] blacklist) {
+        this.map = new HashMap<>();
+        this.r = new Random();
+        
+        for (int b : blacklist)
+            map.put(b, -1);
+        this.nums = N - map.size();
+        
+        for (int b : blacklist) {
+            // number in range so remap
+            if (b < this.nums) {
+                // try to put it to one of the values out of range that isn't taken
+                // keep in mind N is out of the range, so it must start at N - 1
+                while (this.map.containsKey(N - 1))
+                    N--;
+                map.put(b, N - 1);
+                N--; // reduce for the next pick
+            }
+        }
+    }
+    
+    public int pick() {
+        int pick = r.nextInt(nums);
+        return map.containsKey(pick) ? map.get(pick) : pick;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(N, blacklist);
+ * int param_1 = obj.pick();
+ */
