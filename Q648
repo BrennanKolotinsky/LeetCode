@@ -7,9 +7,7 @@ class TrieNode {
     }
     
     public void addWord(String word, TrieNode root) {
-        
         TrieNode curr = root;
-        
         for (char c : word.toCharArray()) {
             int n = c - 'a';
             if (curr.children[n] == null)
@@ -31,13 +29,10 @@ class Solution {
     }
     
     public String replaceWords(List<String> dict, String sentence) {
-        
-        // TRIE yay!
         for (String s : dict)
             this.root.addWord(s, this.root);
                 
         String[] words = sentence.split(" ");
-        
         for (int i = 0; i < words.length; i++)
             words[i] = words[i].substring(0, dfs(this.root, words[i], 0));
                 
@@ -45,17 +40,11 @@ class Solution {
     }
     
     public int dfs(TrieNode curr, String word, int pos) {
-
         if (curr.isWord || word.length() == pos)
             return pos;
         
         int n = word.charAt(pos) - 'a';
-        
-        if (curr.children[n] == null)
-            return word.length();
-            
-        else
-            return dfs(curr.children[n], word, ++pos);
+        return curr.children[n] == null ? word.length() : dfs(curr.children[n], word, ++pos);
     }
     
     public String buildString(String[] words) {
