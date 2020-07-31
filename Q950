@@ -1,0 +1,17 @@
+class Solution {
+    public int[] deckRevealedIncreasing(int[] deck) {
+        Arrays.sort(deck);
+        int[] res = new int[deck.length];
+        
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < deck.length; i++)
+            q.offer(i);
+        
+        for (int n : deck) {
+            res[q.poll()] = n;
+            q.offer(q.poll()); // push the next number to the back of the list
+        }
+
+        return res;
+    }
+}
