@@ -1,0 +1,46 @@
+```
+class TreeNode {
+    
+    public int start, end;
+    public TreeNode left, right;
+    
+    public TreeNode(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+}
+
+class MyCalendar {
+    
+    TreeNode root;
+    boolean inserted;
+
+    public MyCalendar() {
+        this.root = null;
+    }
+    
+    public boolean book(int start, int end) {
+        this.inserted = false;
+        this.root = insert(this.root, start, end);
+        return this.inserted;
+    }
+    
+    public TreeNode insert(TreeNode curr, int start, int end) {
+        if (curr == null) {
+            this.inserted = true;
+            return new TreeNode(start, end);
+        }
+        
+        if (start >= curr.end)
+            curr.right = insert(curr.right, start, end);
+        else if (end <= curr.start)
+            curr.left = insert(curr.left, start, end);
+        return curr;
+    }
+}
+
+/**
+ * Your MyCalendar object will be instantiated and called as such:
+ * MyCalendar obj = new MyCalendar();
+ * boolean param_1 = obj.book(start,end);
+ */
