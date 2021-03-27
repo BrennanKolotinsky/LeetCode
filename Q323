@@ -1,0 +1,56 @@
+class DSU {
+    
+    public int[] path;
+    
+    public DSU(int n) {
+        path = new int[n];
+        Arrays.fill(path, -1); // all start as parents
+    }
+    
+    public void union(int p1, int p2) {
+        
+        int parent1 = find(p1);
+        int parent2 = find(p2);
+        
+        if (parent1 == parent2)
+            return;
+        
+        // parent 1 has more connections
+        if (path[parent1] <= path[parent2]) {
+            path[parent1] += path[parent2];
+            path[parent2] = parent1;
+            path[p2] = parent1;
+        } else {
+            path[parent2] += path[parent1];
+            path[parent1] = parent2;
+            path[p1] = parent2;
+        }
+        
+        return;
+    }
+    
+    public int find(int p) {
+        if (path[p] >= 0)
+            p = find(path[p]);
+        
+        return p;
+    }
+}
+
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        
+        DSU uf = new DSU(n);
+        
+        for (int[] edge : edges)
+            uf.union(edge[0], edge[1]);
+        
+        int cnt = 0;
+        
+        for (int i : uf.path)
+            if (i < 0)
+                ++cnt;
+        
+        return cnt;
+    }
+}
