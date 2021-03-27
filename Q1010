@@ -2,17 +2,16 @@ class Solution {
     public int numPairsDivisibleBy60(int[] time) {
         
         HashMap<Integer, Integer> map = new HashMap<>();
+        int[] cnter = new int[61];
         int cnt = 0;
         
         for (int i = 0; i < time.length; ++i) {
-            // edge case
-            if (time[i] % 60 == 0 && map.containsKey(0)) {
-                cnt += map.get(0);
-            } else if (map.containsKey(60 - time[i] % 60)) {
-                cnt += map.get(60 - time[i] % 60);   
-            }
+            if (time[i] % 60 == 0)
+                cnt += cnter[0];
+            else
+                cnt += cnter[60 - time[i] % 60];
             
-            map.put(time[i] % 60, 1 + map.getOrDefault(time[i] % 60, 0));
+            ++cnter[time[i] % 60];
         }
         
         return cnt;
