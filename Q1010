@@ -1,8 +1,7 @@
 class Solution {
     public int numPairsDivisibleBy60(int[] time) {
         
-        HashMap<Integer, Integer> map = new HashMap<>();
-        int[] cnter = new int[61];
+        int[] cnter = new int[60];
         int cnt = 0;
         
         for (int i = 0; i < time.length; ++i) {
