@@ -1,0 +1,42 @@
+class Solution {
+    public int minDifficulty(int[] jobDifficulty, int d) {
+        
+        int n = jobDifficulty.length;
+        if (d > n)
+            return -1;
+        
+        int[][] memo = new int[n][d + 1];
+        
+        for (int[] m : memo)
+            Arrays.fill(m, -1);
+
+        return dfs(memo, jobDifficulty, d, 0);
+    }
+    
+    public int dfs(int[][] memo, int[] jobDifficulty, int daysLeft, int currJob) {
+        
+        int n = jobDifficulty.length;
+        
+        
+        if (daysLeft == 0 && currJob == n)
+            return 0;
+        else if (daysLeft == 0 || currJob == n)
+            return Integer.MAX_VALUE;
+        
+        if (memo[currJob][daysLeft] != -1)
+            return memo[currJob][daysLeft];
+        
+        int curMax = jobDifficulty[currJob];
+        int min = Integer.MAX_VALUE;
+        
+        for(int schedule = currJob; schedule < n; ++schedule){
+            curMax = Math.max(curMax, jobDifficulty[schedule]);
+            int tmp = dfs(memo, jobDifficulty, daysLeft - 1, schedule + 1);
+            // check to prevent overflow
+            if(tmp != Integer.MAX_VALUE)
+                min = Math.min(min, tmp + curMax);
+        }
+        
+        return memo[currJob][daysLeft] = min;
+    }
+}
