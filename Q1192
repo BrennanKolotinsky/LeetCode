@@ -1,0 +1,59 @@
+class Solution {
+    
+    private int time = -1; // current discovery index
+    
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        
+        for (int i = 0; i < n; ++i) {
+            graph.put(i, new ArrayList<Integer>());
+        }
+        
+        for (List<Integer> conn: connections) {
+            int p1 = conn.get(0);
+            int p2 = conn.get(1);
+            graph.get(p1).add(p2);
+            graph.get(p2).add(p1);
+        }
+        
+        int[] discInd = new int[n];
+        Arrays.fill(discInd, -1); // -1 indicates not visited yet!
+        int[] minInd = new int[n];
+        
+        List<List<Integer>> sol = new ArrayList<>();
+        
+        dfs(sol, discInd, minInd, 0, -1, graph);
+        
+        return sol;
+    }
+    
+    public void dfs(List<List<Integer>> sol, int[] discInd, int[] minInd, int currInd, int parentInd, Map<Integer, List<Integer>> graph) {
+
+        discInd[currInd] = ++time;
+        minInd[currInd] = discInd[currInd];
+       
+        List<Integer> neighbours = graph.get(currInd);
+        
+        if (neighbours == null)
+            return;
+        
+        for (int i : neighbours) {
+            
+            // don't traverse back
+            if (i == parentInd)
+                continue;
+            
+            if (discInd[i] == -1) {
+                dfs(sol, discInd, minInd, i, currInd, graph);
+
+                minInd[currInd] = Math.min(minInd[currInd], minInd[i]); // pass back the smaller value
+
+                if (discInd[currInd] < minInd[i]) // no loop found, the less than prevents entering the same answer twice
+                    sol.add(Arrays.asList(currInd, i));
+            }
+            else
+                minInd[currInd] = Math.min(minInd[currInd], discInd[i]);
+        }
+    }
+}
