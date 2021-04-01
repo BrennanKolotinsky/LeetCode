@@ -1,0 +1,30 @@
+class Solution {
+    public List<Integer> partitionLabels(String S) {
+
+        // find the last value of this character
+        int[] num = new int[26];
+        
+        int i = -1;
+        for (char c: S.toCharArray())
+            num[c - 'a'] = ++i;
+        
+        List<Integer> sol = new ArrayList<>();
+        
+        // add the largest index as we progress, as soon as we hit it without growing it, let's push the partial string
+        int len = 0; // length of the current string we are examining
+        int end = 0; // end of the current character
+        int pos = 0; // index we are currently on
+        for (char c: S.toCharArray()) {
+            ++len;
+            end = Math.max(num[c- 'a'], end); // furthest characters end
+            if (end == pos) {
+                sol.add(len);
+                len = 0;
+            }
+            
+            ++pos;
+        }
+        
+        return sol;
+    }
+}
