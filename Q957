@@ -1,0 +1,39 @@
+class Solution {
+    public int[] prisonAfterNDays(int[] cells, int n) {
+    
+        HashSet<String> st = new HashSet<>();
+        int cycle = 0;
+        
+        for (int i = 0; i < n; ++i) {
+            
+            int[] next = nextDay(cells);
+            
+            if (!st.contains(Arrays.toString(next)))
+                st.add(Arrays.toString(next));
+            else {
+                // found a loop
+                n = n % cycle;
+                
+                while (n-- > 0)
+                    cells = nextDay(cells);
+                
+                break;
+            }
+            
+            ++cycle;
+            
+            cells = next;
+        }
+        
+        return cells;
+    }
+    
+    public int[] nextDay(int[] cells) {
+        int[] tmp = new int[cells.length];
+        
+        for (int i = 1; i < cells.length - 1; ++i)
+            tmp[i] = cells[i - 1] == cells[i + 1] ? 1 : 0;
+        
+        return tmp;
+    }
+}
