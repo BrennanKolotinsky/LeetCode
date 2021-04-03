@@ -1,0 +1,58 @@
+class DSU {
+    
+    int[] parent;
+    
+    public DSU(int n) {
+        parent = new int[n];
+        Arrays.fill(parent, -1);
+    }
+    
+    public int union(int p1, int p2, int cost2) {
+        int parent1 = find(p1);
+        int parent2 = find(p2);
+        
+        if (parent1 == parent2)
+            return -1;
+        
+        if (parent1 < parent2) {
+            parent[parent1] += parent[parent2];
+            parent[parent2] = parent1;
+            parent[p2] = parent1;
+        } else {
+            parent[parent2] += parent[parent1];
+            parent[parent1] = parent2;
+            parent[p1] = parent2;
+        }
+        
+        return cost2;
+    }
+    
+    public int find(int p) {
+        while (parent[p] >= 0)
+            p = find(parent[p]);
+        return p;
+    }
+}
+
+class Solution {
+    public int minimumCost(int N, int[][] connections) {
+        // union find + sort
+        Arrays.sort(connections, (a, b) -> a[2] - b[2]);
+        DSU uf = new DSU(N);
+        int cost = 0;
+        
+        for (int[] conn: connections) {
+            int unionSucc = uf.union(conn[0] - 1, conn[1] - 1, conn[2]);
+            
+            if (unionSucc >= 0) {
+                cost += unionSucc;
+                --N;
+                
+                if (N == 1)
+                    break;
+            }
+        }
+        
+        return N == 1 ? cost : -1; // all connected?
+    }
+}
