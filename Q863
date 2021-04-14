@@ -1,0 +1,159 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    
+    Map<TreeNode, List<TreeNode>> map;
+    
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+        List<Integer> sol = new ArrayList<>();
+        
+        // BUILD A MAP
+        map = new HashMap<>();
+        buildMap(root, null);
+        
+        Queue<TreeNode> q = new LinkedList<>();
+        Set<TreeNode> st = new HashSet<>();
+        
+        // st.add(target);
+        q.offer(target);
+        
+        while (!q.isEmpty()) {
+            int cnt = q.size();
+            
+            if (K == 0) {
+                while (cnt > 0) {
+                    TreeNode curr = q.poll();
+                    sol.add(curr.val);
+                    --cnt;    
+                }
+
+                return sol;
+            }
+            
+            while (cnt > 0) {
+                TreeNode curr = q.poll();
+                
+                st.add(curr);
+                
+                for (int i = 0; i < map.get(curr).size(); ++i) {
+                    TreeNode next = map.get(curr).get(i);
+                    
+                    if (st.contains(next))
+                        continue;
+                    
+                    q.offer(next);
+                }
+                --cnt;
+            }
+            
+            --K;
+        }
+        
+        return sol;
+    }
+    
+    public void buildMap(TreeNode root, TreeNode parent) {
+        if (root == null)
+            return;
+        
+        // skip already visited noodes
+        if (!map.containsKey(root)) {
+            
+            map.put(root, new ArrayList<TreeNode>());
+            
+            if (parent != null) {
+                map.get(root).add(parent);
+                map.get(parent).add(root);
+            }
+            
+            buildMap(root.left, root);
+            buildMap(root.right, root);
+        }
+    }
+}/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    
+    Map<TreeNode, List<TreeNode>> map;
+    
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+        List<Integer> sol = new ArrayList<>();
+        
+        // BUILD A MAP
+        map = new HashMap<>();
+        buildMap(root, null);
+        
+        Queue<TreeNode> q = new LinkedList<>();
+        Set<TreeNode> st = new HashSet<>();
+        
+        // st.add(target);
+        q.offer(target);
+        
+        while (!q.isEmpty()) {
+            int cnt = q.size();
+            
+            if (K == 0) {
+                while (cnt > 0) {
+                    TreeNode curr = q.poll();
+                    sol.add(curr.val);
+                    --cnt;    
+                }
+
+                return sol;
+            }
+            
+            while (cnt > 0) {
+                TreeNode curr = q.poll();
+                
+                st.add(curr);
+                
+                for (int i = 0; i < map.get(curr).size(); ++i) {
+                    TreeNode next = map.get(curr).get(i);
+                    
+                    if (st.contains(next))
+                        continue;
+                    
+                    q.offer(next);
+                }
+                --cnt;
+            }
+            
+            --K;
+        }
+        
+        return sol;
+    }
+    
+    public void buildMap(TreeNode root, TreeNode parent) {
+        if (root == null)
+            return;
+        
+        // skip already visited noodes
+        if (!map.containsKey(root)) {
+            
+            map.put(root, new ArrayList<TreeNode>());
+            
+            if (parent != null) {
+                map.get(root).add(parent);
+                map.get(parent).add(root);
+            }
+            
+            buildMap(root.left, root);
+            buildMap(root.right, root);
+        }
+    }
+}
