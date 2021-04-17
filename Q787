@@ -1,0 +1,51 @@
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
+        if (K == 0 && src == dst)
+            return 0;
+        
+        // BUILD A MAP
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        
+        for (int i = 0; i < n; ++i)
+            map.put(i, new ArrayList<>());
+        
+        for (int[] path : flights) {
+            List<Integer> tmp = map.get(path[0]);
+            tmp.add(path[1]); // even values contain connection
+            tmp.add(path[2]); // odd values contain cost
+        }
+        
+        Queue<int[]> q = new LinkedList<>(); // 0 is current location, 1 is current price!
+        q.offer(new int[]{src, 0});
+        
+        int cost = Integer.MAX_VALUE;
+        boolean fnd = false;
+        
+        while (!q.isEmpty() && K >= 0) {
+            
+            int len = q.size();
+            
+            while (len > 0) {
+                
+                int[] curr = q.poll();
+                for (int i = 0; i < map.get(curr[0]).size(); i = i + 2) {
+                    int newDest = map.get(curr[0]).get(i);
+                    int newCost = map.get(curr[0]).get(i + 1);
+                    
+                    if (newDest == dst) {
+                        cost = Math.min(cost, curr[1] + newCost);
+                        fnd = true;
+                    } else if (newCost + curr[1] < cost) { // don't bother checking ones that are more expensive than a found value!
+                        q.offer(new int[]{newDest, newCost + curr[1]});    
+                    }
+                }
+                
+                --len;
+            }
+            
+            --K;
+        }
+        
+        return fnd ? cost : -1;        
+    }
+}
