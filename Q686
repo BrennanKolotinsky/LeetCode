@@ -1,0 +1,16 @@
+class Solution {
+    public int repeatedStringMatch(String a, String b) {
+        int cnt = 0;
+        StringBuilder sb = new StringBuilder();
+        
+        // new string must be at least as long as b
+        while (sb.length() < b.length()) {
+            sb.append(a);
+            ++cnt;
+        }
+        
+        if (sb.toString().contains(b)) return cnt;
+        if (sb.append(a).toString().contains(b)) return ++cnt; // based on loops it must contain it with at least one more set of a
+        return -1;
+    }
+}
