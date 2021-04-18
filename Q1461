@@ -1,0 +1,10 @@
+class Solution {
+    public boolean hasAllCodes(String s, int k) {
+        Set<String> st = new HashSet<>();
+        
+        for (int i = 0; i <= s.length() - k && st.size() < 1 << k; ++i) // && is a check that saves time from double checking
+            st.add(s.substring(i, i + k));
+        
+        return st.size() == 1 << k; // 1 << k == Math.pow(2, k)
+    }
+}
