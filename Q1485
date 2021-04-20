@@ -1,0 +1,59 @@
+/**
+ * Definition for Node.
+ * public class Node {
+ *     int val;
+ *     Node left;
+ *     Node right;
+ *     Node random;
+ *     Node() {}
+ *     Node(int val) { this.val = val; }
+ *     Node(int val, Node left, Node right, Node random) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *         this.random = random;
+ *     }
+ * }
+ */
+
+class Solution {
+    Map<Node, NodeCopy> map;
+    
+    public NodeCopy copyRandomBinaryTree(Node root) {
+        map = new HashMap<>();
+        
+        if (root == null)
+            return null;
+        
+        NodeCopy newRoot = dfs(root);
+        
+        dfsAddRando(root, newRoot);
+        
+        return newRoot;
+    }
+    
+    public NodeCopy dfs(Node root) {
+        if (root == null)
+            return null;
+        
+        NodeCopy tmpNode = new NodeCopy(root.val);
+        
+        tmpNode.left = dfs(root.left);
+        tmpNode.right = dfs(root.right);
+        
+        map.put(root, tmpNode);
+        
+        return tmpNode;
+    }
+    
+    public void dfsAddRando(Node root, NodeCopy newRoot) {
+        if (root == null)
+            return;
+        
+        if (map.containsKey(root.random))
+            newRoot.random = map.get(root.random);
+        
+        dfsAddRando(root.left, newRoot.left);
+        dfsAddRando(root.right, newRoot.right);        
+    }
+}
