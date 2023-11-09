@@ -1,0 +1,25 @@
+class Solution {
+    public int countStudents(int[] students, int[] sandwiches) {
+        Queue<Integer> q = new LinkedList<>();
+        
+        for (int i = 0; i < students.length; i++)
+            q.add(students[i]);
+
+        int currentSandwich = 0;
+        int checked = 0;
+        while (!q.isEmpty() && checked < q.size()) {
+            int studentPreference = q.remove();
+
+            if (studentPreference == sandwiches[currentSandwich]) {
+                ++currentSandwich;
+                checked = 0;
+            } else {
+                q.add(studentPreference);
+                ++checked;
+            }
+
+        }
+
+        return q.size();
+    }
+}
